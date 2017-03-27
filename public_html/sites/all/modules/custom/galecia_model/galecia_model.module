@@ -541,8 +541,6 @@ function galecia_model_create_activity_log ($reader, $activity) {
 
                 $readers->field_claimed_activities['und'][]['target_id']=(array)$code_id;
 
-                dsm($readers->field_claimed_activities);
-
                      entity_save('reader', $readers);
 
                      drupal_set_message(t('You added an activity!'));
