@@ -95,6 +95,91 @@ function bookpoints_importers_feeds_importer_default() {
   $feeds_importer = new stdClass();
   $feeds_importer->disabled = FALSE; /* Edit this to true to make a default feeds_importer disabled initially */
   $feeds_importer->api_version = 1;
+  $feeds_importer->id = 'import_badges';
+  $feeds_importer->config = array(
+    'name' => 'Import Badges',
+    'description' => 'Bookpoints: Badge Importer (Admin Setup)',
+    'fetcher' => array(
+      'plugin_key' => 'FeedsFileFetcher',
+      'config' => array(
+        'allowed_extensions' => 'txt csv tsv xml opml',
+        'delete_uploaded_file' => FALSE,
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
+        'allowed_schemes' => array(
+          0 => 'public',
+        ),
+      ),
+    ),
+    'parser' => array(
+      'plugin_key' => 'FeedsCSVParser',
+      'config' => array(
+        'delimiter' => ',',
+        'encoding' => 'UTF-8',
+        'no_headers' => 0,
+      ),
+    ),
+    'processor' => array(
+      'plugin_key' => 'FeedsEntityProcessorBadge',
+      'config' => array(
+        'values' => array(
+          'id' => '',
+          'title' => '',
+        ),
+        'authorize' => TRUE,
+        'mappings' => array(
+          0 => array(
+            'source' => 'import id',
+            'target' => 'guid',
+            'unique' => 1,
+            'language' => 'und',
+          ),
+          1 => array(
+            'source' => 'title',
+            'target' => 'title',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+          2 => array(
+            'source' => 'description',
+            'target' => 'field_badge_description',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+          3 => array(
+            'source' => 'image url',
+            'target' => 'field_badge_image:uri',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+          4 => array(
+            'source' => 'message',
+            'target' => 'field_badge_message',
+            'unique' => FALSE,
+            'language' => 'und',
+          ),
+        ),
+        'insert_new' => '1',
+        'update_existing' => '2',
+        'update_non_existent' => 'skip',
+        'input_format' => 'plain_text',
+        'skip_hash_check' => 0,
+        'bundle' => 'badge',
+        'language' => 'und',
+      ),
+    ),
+    'content_type' => '',
+    'update' => 0,
+    'import_period' => '-1',
+    'expire_period' => 3600,
+    'import_on_create' => 1,
+    'process_in_background' => 0,
+  );
+  $export['import_badges'] = $feeds_importer;
+
+  $feeds_importer = new stdClass();
+  $feeds_importer->disabled = FALSE; /* Edit this to true to make a default feeds_importer disabled initially */
+  $feeds_importer->api_version = 1;
   $feeds_importer->id = 'import_branches';
   $feeds_importer->config = array(
     'name' => 'Import Branches',
