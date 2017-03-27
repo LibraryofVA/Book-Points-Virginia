@@ -1,0 +1,305 @@
+<?php
+/**
+ * @file
+ * Dashboard Module for Galicia Group.
+ */
+
+// Library Include Files
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/library_dashboard');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/branches_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_branch');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/program_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_program_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/readers_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_level_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/edit_level_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_badge_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_activity_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_secret_code_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_prize');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/readers_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/add_drawing_ticket');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/program_overview_page');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/manage_prizes');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/user_search');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/reader_overview');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/manage_badges');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/manage_activities');
+
+module_load_include('inc', 'library_dashboard', 'include/library/dashboard/manage_secret_codes');
+
+/**
+ * Implements hook_menu().
+ */
+
+function library_dashboard_menu(){
+    
+    // Library menu Paths
+    $items['library/dashboard'] = array(
+	        'title' => t('LIBRARY DASHBOARD'),
+	        //'page arguments' => array(2),
+    		'page callback' => 'library_dashboard_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/branches'] = array(
+	        'title' => t('Branches'),
+	        'page callback' => 'branches_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/branches/add'] = array(
+	        'title' => t('Add Branch'),
+	        'page callback' => 'add_branch_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+	$items['library/dashboard/program'] = array(
+	        'title' => t('All Programs'),
+	        'page callback' => 'program_pages',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/program/add'] = array(
+	        'title' => t('Add Programs'),
+	        'page callback' => 'add_program_pages',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/readers'] = array(
+	        'title' => t('Readers List'),
+	        'page callback' => 'reader_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['library/dashboard/program/level/add'] = array(
+	        'title' => t('Add Level'),
+	        'page callback' => 'add_levels_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+
+	$items['library/dashboard/program/{program_id}/{level_id}/edit'] = array(
+	        'title' => t('Add Level'),
+	        'page callback' => 'edit_level_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+	$items['library/dashboard/level/points'] = array(
+	        'title' => t('Add Level'),
+	        'page callback' => 'add_points_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/badges/manage_badges'] = array(
+	        'title' => t('Manage Badges'),
+	        'page callback' => 'manage_badges',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/branches/program/badge/add'] = array(
+	        'title' => t('Add Badge'),
+	        'page callback' => 'add_badge_pages',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+       $items['library/dashboard/activities/manage_activities'] = array(
+	        'title' => t('Manage Activities'),
+	        'page callback' => 'manage_activities',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/activities/program/activity/add'] = array(
+	        'title' => t('Add Activity'),
+	        'page callback' => 'add_activity_pages',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+       $items['library/dashboard/secret_codes/manage_secret_codes'] = array(
+	        'title' => t('Manage Secret Codes'),
+	        'page callback' => 'manage_secret_codes',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/secret_codes/program/secret_code/add'] = array(
+	        'title' => t('Add Secret Code'),
+	        'page callback' => 'add_secret_code_pages',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/branches/manage_prizes'] = array(
+	        'title' => t('Manage Prizes'),
+	        'page callback' => 'manage_prizes_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/branches/program/prize/add'] = array(
+	        'title' => t('Add Prize'),
+	        'page callback' => 'add_prize_pages',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['library/dashboard/branches/program/drawing_ticket/add'] = array(
+	        'title' => t('Add Drawing Ticket'),
+	        'page callback' => 'add_drawing_ticket_pages',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+        $items['library/dashboard/program/program_overview_page'] = array(
+	        'title' => t('Program Overview'),
+	        'page callback' => 'program_overview_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+        $items['library/dashboard/user_search'] = array(
+	        'title' => t('User Search'),
+	        'page callback' => 'user_search',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+        $items['library/dashboard/readers/reader_overview'] = array(
+	        'title' => t('Reader Overview'),
+	        'page callback' => 'reader_overview',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access library dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+	return $items;
+}
+
+function library_dashboard_permission (){
+	return array(
+    'access library dashboard' => array(
+      'title' => t('Access Library Dashboard'),
+      'description' => t('Allows access to Library Dashboard.'),
+    ),
+  );
+
+}
+
+
+function library_dashboard_form_alter(&$form, &$form_state, $form_id) {
+
+	
+
+	if ($form_id == 'eck__entity__form_add_program_program') {
+
+		$form['#submit'][] = 'create_level';
+	
+	}
+
+}
+
+function create_level(&$form, &$form_state) {
+
+
+	$program=array($form_state['program']->id);
+
+	    $entity_type='level';
+        $entity = entity_create($entity_type, array('type' => 'level'));
+        $wrapper = entity_metadata_wrapper($entity_type, $entity);
+
+
+        $wrapper->title='0 ' . $form_state['program']->title;
+        $wrapper->field_level_number = 1;
+        $wrapper->field_point_threshold = 0;
+        $wrapper->field_level_message = t("This is the auto-generated beginning level. You may edit any of these details later");
+        $wrapper->field_program_reference=$program;
+
+
+        $wrapper->save();
+
+        drupal_set_message (t('Default level for ') . $form_state['program']->title . t(' also created. You may edit any of the default level details now.'));
+
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function library_dashboard_form_views_exposed_form_alter(&$form, &$form_state) {
+  // ------------------------------------------------------------
+  // Add an own reset button to all views exposed forms. The reason behind is,
+  // that the default Drupal reset button doesn't play nice with AJAX
+  // and jumps back to the front page because of URL problems. So it's unusable for us.
+  //
+  // Add class to make it better selectable in JS and CSS
+  $form['submit']['#attributes'] = array('class' => array('my-views-filter-submit'));
+  $submit_btn_id = $form['submit']['#id'];
+  if (!empty($submit_btn_id) && !empty($form['reset'])) {
+    // Add own reset button
+    $form['submit']['#suffix'] = '<button onclick="javascript:jQuery(this.form).clearForm();jQuery(this.form).find(\'#' . $submit_btn_id . '\').trigger(\'click\');return false;" class="form-submit ico-remove form-reset my-views-filter-reset">' . t('Reset') . '</button>';
+    // Remove the original RESET button.
+    unset($form['reset']);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

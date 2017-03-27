@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Bookpoints Drawing feature.
+ */
+
+include_once 'bookpoints_drawing.features.inc';

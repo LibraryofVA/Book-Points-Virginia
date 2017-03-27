@@ -1,0 +1,400 @@
+<?php
+
+/**
+* Implements hook_theme().
+*/
+
+function galecia_profile_builder_theme($existing, $type, $theme, $path) {
+
+  return array(
+    'program_radios_before_element' => array(
+          'render element' => 'element',
+          'function' => 'bookpoints_custom_programs_radios_before_element'
+      ),
+      'program_radio_before_element' => array(
+            'render element' => 'element',
+            'function' => 'bookpoints_custom_programs_radio_before_element'
+        ),
+    );
+}
+
+
+/**
+* Implements hook_menu().
+*/
+
+function galecia_profile_builder_menu() {
+  $items['galecia_profile_builder/wizard_form'] = array(
+    'type' => MENU_CALLBACK,
+    'title' => t('Add Readers'),
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('access content'),
+     'page arguments'=>array('galecia_profile_builder_form'));
+  return $items;
+}
+
+function galecia_profile_builder_form($form, &$form_state) {
+
+
+    if(isset($form_state['values'])) {
+        $currstep = $form_state['step'] + 1;
+    }else {
+        $currstep = 0;
+    }
+    $form_state['step'] = $currstep;
+    $allsteps = getForm();
+    $currform =  $allsteps[$currstep];
+
+    return $currform;
+}
+
+function getForm() {
+
+    $form = array();
+    $step1 = array();
+    $step1['first_name']=array(
+        '#type'=>'textfield',
+        '#title'=>t('First Name'),
+        '#description'=>t("Enter your Reader's first name.")
+      );
+    $step1['last_name']=array(
+        '#type'=>'textfield',
+        '#title'=>t('Last Name'),
+        '#description'=>t("Enter your Reader's last name or initial.")
+      );
+    $step1['age']=array(
+        '#type'=>'textfield',
+        '#title'=>t('Age'),
+        '#description'=>t("Enter your reader's age.")
+      );
+
+     $grades = array(
+            'Headstart' => t('Headstart'),
+            'Pre-K' => t('Pre-K'),
+            'Kindergarten' => t('Kindergarten'),
+            'First' => t('First'),
+            'Second' => t('Second'),
+            'Third' => t('Third'),
+            'Fourth' => t('Fourth'),
+            'Fifth' => t('Fifth'),
+            'Sixth' => t('Sixth'),
+            'Seventh' => t('Seventh'),
+            'Eighth' => t('Eighth'),
+            'Ninth' => t('Ninth'),
+            'Tenth' => t('Tenth'),
+            'Eleventh' => t('Eleventh'),
+            'Twelfth' => t('Twelfth'),
+            'College' => t('College'),
+            'Not in School' => t('Not in School'),
+          );
+
+    $step1['grade']=array(
+        '#type'=>'select',
+        '#title'=>t('Grade'),
+        '#options' => $grades,
+        '#description'=>t("Select the last grade completed.")
+      );
+
+    $step1['school']=array(
+        '#type' => 'select',
+        '#title' => t('School'),
+        '#options' => get_ents('school'),
+        '#description' => t('Select the school last attended.')
+        );
+
+
+
+    $step1['submit']=array(
+        '#type'=>'submit',
+        '#value'=>t('Next')
+      );
+
+    $form[] = $step1;
+
+
+     $step2['program']=array(
+        '#type' => 'radios',
+        '#title' => t('Choose a Program'),
+        '#options' => get_ents('program'),
+        '#theme' => 'program_radios_before_element',
+        );
+
+
+    $step2['submit']=array(
+        '#type'=>'submit',
+        '#value'=>t('Next'),
+        '#attributes'=>array('class'=> array('step2'))
+      );
+
+    $form[] = $step2;
+
+
+    $step3['new_reader']=array(
+        '#type'=>'radios',
+        '#title'=>t('Do you want to add another Reader?'),
+        '#options'=>array('Yes','No')
+      );
+
+
+    $step3['submit']=array(
+        '#type'=>'submit',
+        '#value'=>t('Next')
+      );
+
+    $form[] = $step3;
+
+    return $form;
+}
+
+ function galecia_profile_builder_form_validate($form, $form_state) {
+
+
+    if (!isset($form_state['storedvalues'][0]['age'])) {
+
+    $age=$form_state['values']['age'];
+
+    }
+
+    if($form_state['step'] == 0) {
+
+        if (!is_numeric($age)) {
+            form_set_error('age', t('You must use a number for the age'));
+        }
+
+    }
+
+
+  
+}
+
+
+function galecia_profile_builder_form_submit($form, &$form_state) {
+
+  $mydate=getdate(date("U"));
+    $current_date="$mydate[weekday], $mydate[month] $mydate[mday], $mydate[year]";
+
+    $continue=0;
+
+
+    $form_state['storedvalues'][$form_state['step']] = $form_state['values'];
+    if($form_state['step'] + 1 != getNumberOfSteps()) {
+        $form_state['rebuild'] = TRUE;
+    }else {
+
+        $finalformvalues=array();
+
+
+        $finalformvalues['new_reader']=0;
+        $currStep = 0;
+        foreach (getForm() as $step) {
+            foreach ($step as $key => $value) {
+                if(strcmp($key,"submit") != 0) {
+                    $finalformvalues[$key] = $form_state['storedvalues'][$currStep][$key];
+                }
+            }
+            $currStep++;
+        }
+        global $user;
+        $current_user=$user;
+        
+
+        $loaded_program=entity_load_single('program', $finalformvalues['program']);
+
+        // $starter_badge=$loaded_program->field_starter_badge['und'][0]['tid'];
+
+      
+        //Store the values from $finalformvalues in database or file etc
+
+        $entity_type='reader';
+        $entity = entity_create($entity_type, array('type' => 'reader'));
+        $wrapper = entity_metadata_wrapper($entity_type, $entity);
+
+        $wrapper->field_first_name = $finalformvalues['first_name'];
+        $wrapper->title = $finalformvalues['first_name'];
+        $wrapper->field_last_name = $finalformvalues['last_name'];
+        $wrapper->field_age = $finalformvalues['age'];
+        $wrapper->field_grade = $finalformvalues['grade'];
+        $wrapper->field_reader_school = $finalformvalues['school'];
+        $wrapper->field_current_points = 0;
+        $wrapper->field_program->set(array($finalformvalues['program']));
+        // $wrapper->field_current_program->set(array($finalformvalues['program']));
+
+        $program_level=level_getter($finalformvalues['program']);
+
+       
+
+        $wrapper->field_current_level = $program_level;
+        $wrapper->field_parent_uid->set($current_user->uid);
+
+
+        $wrapper->save();
+
+         $loaded_level=entity_load_single('level', $program_level);
+
+         $reader_fname=$entity->field_first_name['und'][0]['value'];
+
+         $reader_lname=$entity->field_last_name['und'][0]['value'];
+
+
+      if(!empty($loaded_level->field_prize_reference)){
+
+
+      $prize=entity_load_single('prize', $loaded_level->field_prize_reference['und'][0]['target_id']);
+
+      $prize_reference=$loaded_level->field_prize_reference['und'][0]['target_id'];
+
+      
+
+      $prize_name=$prize->title;
+      $prize_status=$prize->field_prize_status['und'][0]['value'];
+      $prize_id=$prize->id;
+      $prize_program=array($loaded_level->field_program_reference['und'][0]['target_id']);
+      $prize_level=array($loaded_level);
+
+
+      $reader_prize_type = 'reader_prize';
+      $reader_prize = entity_create($reader_prize_type, array('type' => 'reader_prize'));
+      $wrapper = entity_metadata_wrapper($reader_prize_type, $reader_prize);
+      $wrapper->title = $prize_name . t(' for ') . $reader_fname . " " . $reader_lname;
+      $wrapper->field_status = $prize_status;
+      $wrapper->field_readers = array($entity->id);
+      $wrapper->field_program_reference = $prize_program;
+      $wrapper->field_level = $prize_level;
+      $wrapper->field_prize_reference = $prize_reference;
+      $wrapper->save();
+
+      }
+
+      if(!empty($loaded_level->field_reader_badge)){
+
+
+      $level_badge=$loaded_level->field_reader_badge['und'][0]['target_id'];
+
+      $reader_badge_type = 'reader_badge';
+      $reader_badge = entity_create($reader_badge_type, array('type' => 'reader_badge'));
+      $wrapper = entity_metadata_wrapper($reader_badge_type, $reader_badge);
+      $wrapper->field_readers = array($entity->id);
+      $wrapper->field_reader_badge = $level_badge;
+      $wrapper->save();
+
+      }
+
+
+      if (!empty($loaded_level->field_drawing_tickets)) {
+
+
+        $level_tickets=$loaded_level->field_drawing_tickets['und'][0]['value'];
+
+        for($i=1; $i <= $level_tickets; $i++) {
+
+        $reader_ticket_type = 'reader_ticket';
+        $reader_ticket = entity_create($reader_ticket_type, array('type' => 'reader_ticket'));
+        $wrapper = entity_metadata_wrapper($reader_ticket_type, $reader_ticket);
+        $wrapper->title = t('Drawing Ticket ') . $i . t(' on ') . $current_date . t(' for ') . $reader_fname . " " . $reader_lname;
+        $wrapper->field_readers = array($entity->id);
+        $wrapper->field_level = $prize_level;
+        $wrapper->field_ticket_status = t('Not Drawn');
+        $wrapper->save();
+
+        }
+      }
+
+
+     $user_to_update=user_load($current_user->uid);
+
+     if (!empty($user_to_update->field_readers)) { 
+
+      $count=count($user_to_update->field_readers['und']);
+        }else {
+            $count=0;
+        }
+
+
+      $user_to_update->field_readers['und'][$count]['target_id']=$entity->id;
+
+              if(empty($user_to_update->field_current_reader)) {
+
+                $user_to_update->field_current_reader['und'][0]['target_id']=$entity->id;
+          }
+    
+      // // save existing user
+      //   user_save((object) array('uid' => $user_to_update->uid), (array) $user_to_update);
+
+      field_attach_update('user', $user_to_update);
+
+
+    }
+
+    if (!empty($finalformvalues)) {
+
+    $continue=$finalformvalues['new_reader'];
+    }
+
+    if ($continue == 1) {
+        drupal_goto('reader-dashboard');
+    }
+
+
+}
+
+
+function getNumberOfSteps() {
+    return count(getForm());
+}
+
+function get_tax($vocabulary) {
+  $terms = taxonomy_get_tree($vocabulary);
+
+  foreach ($terms as $data) {
+    $output[$data->tid] = $data->name;
+  }
+
+  return $output;
+}
+
+function get_ents($entities) {
+  $ents = entity_load($entities, FALSE, array(), TRUE);
+  $output=array();
+
+
+  if (!empty($ents)) {
+
+      foreach ($ents as $data) {
+
+        $output[$data->id] = $data->title;
+      }
+  }
+
+  return $output;
+}
+
+function level_getter($program) {
+  $ents = entity_load('level', FALSE, array(), TRUE);
+  $output=array();
+
+  $levels=array();
+  if (!empty($ents)) {
+
+      foreach ($ents as $data) {
+
+
+        if($data->field_program_reference['und'][0]['target_id'] == $program) {
+            $levels[]=$data->id;
+            $output=$levels[0];
+        }
+
+      }
+  }
+
+
+  return $output;
+}
+
+
+
+
+
+
+
+
+

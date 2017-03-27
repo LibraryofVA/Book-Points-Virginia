@@ -1,0 +1,269 @@
+<?php
+/**
+ * @file
+ * Dashboard Module for Galicia Group.
+ */
+
+// Anonymous Files
+// module_load_include('inc', 'galecia_reader_dashboard', 'include/anonymous/log_in');
+
+// Reader Include Files
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/reader_dashboard');
+
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/reader_add');
+
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/reading_history');
+
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/log_add');
+
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/activity_log');
+
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/activity_log_add');
+
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/code_lookup');
+
+module_load_include('inc', 'galecia_reader_dashboard', 'include/reader/activity_clicker');
+
+/**
+ * Implements hook_menu().
+ */
+
+function galecia_reader_dashboard_menu(){
+	// The home page will be for all users. 
+    // Anonymous user
+    // $items['log_in'] = array(
+	   //      'title' => 'Log In',
+	   //      'page callback' => 'home_login_page',
+	   //      'access callback' => TRUE,
+	   //      'type' => MENU_NORMAL_ITEM,
+    // );
+    
+    // Reader menu Paths
+    $items['reader/dashboard'] = array(
+	        'title' => t('Reader Dashboard'),
+	        'page callback' => 'reader_dashboard',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access reader dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+        // Reader menu Paths
+    $items['reader/dashboard/profile/add'] = array(
+	        'title' => t('Add Profile'),
+	        'page callback' => 'reader_add',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access reader dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+        $items['reader/dashboard/history/reading'] = array(
+	        'title' => t('View history'),
+	        'page callback' => 'reader_history',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access reader dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+           $items['reader/dashboard/program/activity/add'] = array(
+	        'title' => t('Add activity'),
+	        'page callback' => 'log_add',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access reader dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+     
+     $items['reader/dashboard/activity_log_reference'] = array(
+	        'title' => t('Activity Log'),
+	        'page callback' => 'activity_log_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access reader dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+
+     $items['reader/dashboard/activity_log_reference/add'] = array(
+	        'title' => t('Add activity log'),
+	        'page callback' => 'activity_log_add_page',
+	        'access callback' => 'user_access',
+	        'access arguments' => array('access reader dashboard'),
+	        'type' => MENU_NORMAL_ITEM,
+    );
+    // // Library Link Paths
+    // $items['library_dashboard'] = array(
+	   //      'title' => 'Library Dashboard',
+	   //      'page callback' => 'library_dashboard',
+	   //      'access callback' => TRUE,
+	   //      'type' => MENU_NORMAL_ITEM,
+    // );
+    
+
+
+	return $items;
+}
+
+function galecia_reader_dashboard_permission (){
+	return array(
+    'access reader dashboard' => array(
+      'title' => t('Access Reader Dashboard'),
+      'description' => t('Allows access to Reader Dashboard.'),
+    ),
+  );
+
+}
+
+
+
+function galecia_reader_dashboard_check_registration($user){
+	// global $user;
+	// //query to find user
+	$current_user=$user;
+
+	$loaded_user=user_load($current_user);
+
+
+	// Check which reader is set
+
+	$current_reader=$loaded_user->field_current_reader['und'][0]['target_id'];
+
+	$result=array();
+
+	$result[$current_user]=$current_reader;
+
+	return $result;
+
+}
+
+function galecia_reader_dashboard_form_alter(&$form, &$form_state, $form_id) {
+
+	  if ($form_id == 'reading_activity_form') {
+
+	  	global $user;
+
+		$current_user=$user->uid;
+
+		if (user_has_role(4)) {
+
+		$user_details=galecia_reader_dashboard_check_registration($current_user);
+
+		foreach ($user_details as $key => $value) {
+ 
+    	$current_reader=$user_details[$key];
+		}
+
+		$form['profile_id']['#value'] = $current_reader;
+
+		}
+
+		else {
+
+		$current_reader = arg(5);
+
+		$form['profile_id']['#value'] = $current_reader;
+
+		}
+
+
+		$entity=entity_load_single('reader', $current_reader);
+
+		$program_id=$entity->field_program['und'][0]['target_id'];
+
+
+		$form['program_id']['#value'] = $program_id;
+
+		$program=entity_load_single('program', $program_id);
+
+		$scoring_type = $program->field_scoring_type['und'][0]['value'];
+
+		if (!empty($program->field_per_unit_label)) {
+
+		$unit_label = $program->field_per_unit_label['und'][0]['value'];
+
+		}
+
+		$form['unit_type']['#value'] = $unit_label;
+
+		$points_per_unit = $program->field_per_unit_point_value['und'][0]['value'];
+
+		if ($scoring_type == 'Points Per Book') {
+			$form['units']['#type'] = 'hidden';
+
+			$form['units']['#value'] = 1;
+
+			$form['unit_type']['#value'] = t('Points Per Book');
+
+
+		}else {
+
+			$form['units']['#placeholder'] = t('Enter How Many ' . $unit_label . 's You Read');
+
+
+		}
+
+
+
+	  }
+
+
+	 if ($form_id == 'eck__entity__form_edit_reader_reader') 
+	 {
+
+	  	if (user_has_role(4)) {
+
+	  	$form['field_points']['#access']=FALSE;
+	  	$form['field_program']['#access']=FALSE;
+	  	$form['field_level']['#access']=FALSE;
+	  	$form['field_my_badges']['#access']=FALSE;
+	  	$form['field_my_prizes']['#access']=FALSE;
+	  	$form['field_parent_uid']['#access']=FALSE;
+	  	$form['field_all_badges']['#access']=FALSE;
+	  	$form['field_account_family_notes']['#access']=FALSE;
+	  	$form['field_library_card']['#access']=FALSE;
+
+	  }
+	}
+
+	 if ($form_id == 'user_profile_form') 
+	 {
+
+	 global $user;
+
+	if (user_has_role(4)) {
+
+		$form['account']['name']['#access']=FALSE;
+		$form['account']['mail']['#access']=FALSE;
+		$form['account']['status']['#access']=FALSE;
+		$form['account']['roles']['#access']=FALSE;
+		$form['account']['notify']['#access']=FALSE;
+		$form['picture']['#access']=FALSE;
+		$form['field_first_name']['#access']=FALSE;
+		$form['field_last_name']['#access']=FALSE;
+		$form['field_favorite_branch']['#access']=FALSE;
+		$form['field_readers']['#access']=FALSE;
+		$form['field_current_reader']['#access']=FALSE;
+	  	$form['field_points']['#access']=FALSE;
+	  	$form['field_program']['#access']=FALSE;
+	  	$form['field_level']['#access']=FALSE;
+	  	$form['field_my_badges']['#access']=FALSE;
+	  	$form['field_my_prizes']['#access']=FALSE;
+	  	$form['field_parent_uid']['#access']=FALSE;
+	  	$form['field_all_badges']['#access']=FALSE;
+	  	$form['field_library_card']['#access']=FALSE;
+	  	$form['field_account_family_notes']['#access']=FALSE;
+
+	  }
+
+	 }
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+

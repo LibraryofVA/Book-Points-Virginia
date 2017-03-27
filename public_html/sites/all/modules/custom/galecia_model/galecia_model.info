@@ -1,0 +1,4 @@
+name = Galecia Model Module
+description = A custom module containing various functionality for the Galecia Project.
+core = 7.x
+package = "Dashboard"

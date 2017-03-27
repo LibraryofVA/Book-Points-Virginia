@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Book Logs feature.
+ */
+
+include_once 'book_logs.features.inc';

@@ -1,0 +1,44 @@
+/**
+ * bookpoints_custom bookpoints_custom.css
+ *
+ * Use this file to add your custom styles.
+ *
+ * You can change the name of this file, just
+ * remember to update the name in the info file
+ * as well.
+ */
+
+
+/** Points awarded **/
+
+.field-name-field-points-awarded {
+    font-size: 325%;
+}
+
+.point-label {
+    display: block;
+    font-size: 38%;
+    margin-top: -10%;
+}
+
+
+/** My reading log **/
+.pane-my-reading-log {
+    padding: 2%;
+}
+
+.entitytype-reading_log_entry-form {
+    padding-left: 4%;
+}
+
+.region-two-66-33-second .region-inner {
+    margin: 12% 0 0 10%;
+}
+
+.region-two-66-33-second .points-value {
+    font-size: 325%;
+}
+
+.region-two-66-33-second .points-label {
+    margin-top: -5%;
+}

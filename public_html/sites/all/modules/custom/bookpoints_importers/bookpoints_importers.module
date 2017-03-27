@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Bookpoints Importers feature.
+ */
+
+include_once 'bookpoints_importers.features.inc';

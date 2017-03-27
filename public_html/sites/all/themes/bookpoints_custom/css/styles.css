@@ -1,0 +1,344 @@
+/**
+ * bookpoints_custom bookpoints_custom.css
+ *
+ * Use this file to add your custom styles.
+ *
+ * You can change the name of this file, just
+ * remember to update the name in the info file
+ * as well.
+ */
+
+ .form-item-program label{
+  font-size:22px !important;
+  margin-bottom:10px;
+ }
+
+ .program-blocks {
+  float:left;width:50%;
+  margin-bottom:15px
+ }
+ 
+ @media only screen and (max-width: 764px) {
+  .program-blocks {
+  float:left;
+  width:100%;
+  margin-bottom:15px
+ }
+
+ .badge-div {
+    float:left;
+    width:48%;
+    margin-left:1%;
+    margin-right:1%;
+    text-align:center;
+}
+
+ }
+
+.program-buttons,  
+.program-buttons:hover,
+.program-buttons:focus {
+white-space:normal !important;
+background:none !important; 
+color:#086782; 
+border:none; padding:0 !important; 
+font:inherit; 
+font-size:1.5em !important; 
+cursor:pointer
+ }
+
+ .program-blocks .form-radio {
+  display:none !important;
+ }
+
+.step2{
+  visibility:hidden !important;
+ }
+
+.three-col-table {
+    width:33%;
+}
+
+.my-views-filter-reset {
+    background:url(/sites/all/themes/corolla/css/images/button.png) repeat-x left top transparent;
+    border:1px solid #c4c4c4;
+    cursor:pointer;
+    margin:0px 5px 0 15px;
+    padding:5px 11px;
+    font-family:'Trebuchet MS', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    -webkit-border-radius:6px;
+    -moz-border-radius:6px;
+    border-radius:6px;
+    font-size:100%;
+}
+
+.button-float {
+   /** float:right; */
+    margin-bottom:25px;
+}
+
+.right-float {
+    float:right;
+}
+
+#reading-activity-form {
+    max-width:300px;
+    margin-right:10px;
+}
+
+.badges-container {
+    border:1px solid black;
+    overflow:hidden;
+}
+
+#left-panel-content
+{
+   padding: 0px 10px;
+   overflow: auto;
+}
+
+#tab-container
+{
+   float: left;
+   margin: 0px 0 0 0;
+   width: 50%;
+}
+#tab-container ul
+{
+   list-style: none;
+   text-align: center;
+
+}
+#tab-container ul li
+{
+   border-top: 1px solid #666;
+   border-right: 1px solid #666;
+   border-bottom: 1px solid #666;
+   border-left: 1px solid #666;
+   margin: 0px 0;
+   padding-top:20px;
+   height:50px;
+}
+#tab-container ul li a,
+#tab-container ul li a:visited
+{
+   text-decoration: none;
+   color: #666;
+   display: block;
+   padding: 15px 5px;
+}
+#tab-container ul li:hover
+{
+   border-left: 8px solid #f44242;
+   cursor:pointer;
+}
+#tab-container ul li a:hover
+{
+   color: #000;
+}
+#tab-container ul li.selected
+{
+   border-right: none;
+   background-color: #fff;
+   border-left: 8px solid #006699;
+   width:75%;
+   height:75px;
+}
+
+#reader-switch-form {
+    display:none;
+}
+
+.selected-tab {
+
+    width:150%;
+    height:75px!important;
+    padding-top:55px!important;
+
+}
+
+.centered-text {
+    text-align:center;
+}
+
+.color-1{
+    background-color: #edc278;
+
+}
+
+.color-2 {
+    background-color: #afddb1;
+
+}
+
+.color-3 {
+    background-color: #e5a2d4;
+}
+
+.color-4 {
+
+    background-color: #cd8fe8;
+
+}
+
+.badge-div {
+    float:left;
+    width:23%;
+    margin-left:1%;
+    margin-right:1%;
+    text-align:center;
+}
+
+.badge-div img {
+    padding:10px;
+}
+
+.badge-small-div {
+    float:left;
+    width:23%;
+    text-align:center;
+    margin-left:1%;
+    margin-right:1%;
+    
+}
+
+.badge-small-div img {
+    padding:10px;
+}
+
+.form-item-stars {
+    float:left;
+    padding-left:5px;
+}
+
+#reading-activity-form .description {
+    clear:both;
+}
+
+
+
+
+.welcomeleft {
+    float: left;
+    padding: 3%;
+    width: 40%;
+}
+
+.welcomeright {
+    float: right;
+    padding: 3%;
+    width: 40%;
+}
+
+@media all and (max-width : 768px) {
+
+   .welcomeleft {
+        width: 94%;
+        padding: 3% 3% 0 3%;
+    }
+    .welcomeright {
+        width: 94%;
+        padding: 0 3% 3% 3%;
+    }
+}
+
+/** Points awarded **/
+
+.field-name-field-points-awarded {
+    font-size: 3.25em;
+}
+
+.point-label {
+    display: block;
+    font-size: .38em;
+}
+
+
+/** My reading log **/
+.pane-my-reading-log {
+    padding: 2%;
+}
+
+.entitytype-reading_log_entry-form {
+    padding-left: 4%;
+}
+
+.region-two-66-33-second .region-inner {
+    margin: 12% 0 0 10%;
+}
+
+.region-two-66-33-second .points-value {
+    font-size: 3.25em;
+}
+
+.region-two-66-33-second .points-label {
+    margin-top: -5%;
+}
+
+/** Claim this award button **/
+
+/**  flag-wrapper.flag-claim.flag-claim-40 {
+    padding: 3%;
+    font-size: 1.15em;
+    background-color: red;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}  **/
+
+.flag.flag-action.flag-link-normal {
+    color: white;
+    padding: 3%;
+    font-size: 1.15em;
+    background-color: #086782;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+td.views-field.views-field-field-points-awarded {
+    font-size: 3.25em;
+    line-height: .75em;
+}
+td.views-field .point-label {
+    display: block;
+    font-size: .38em;
+}
+
+/* Code lookup point size */
+
+.view-mode-output_for_code_searcher .field-name-field-points-awarded,
+.view-mode-output_for_code_searcher.field-name-field-secret-code {
+    font-size: 1.5em;
+    margin-top: 4%;
+    line-height: 1.5em;
+}
+
+.view-mode-output_for_code_searcher .field-name-field-secret-code, .view-mode-output_for_code_searcher .field-name-field-ebadge-awarded  {
+    font-size: 1.5em;
+}
+
+.field-name-field-points-awarded {
+    line-height: .75em;
+}
+
+.node-activity-page.view-mode-full .flag-outer.flag-outer-claim  {
+    margin-bottom: 5%;
+    margin-top: 5%;
+}
+
+
+/* Hide Group Membership */
+
+#edit-og-user-node.field-type-entityreference.field-name-og-user-node.field-widget-entityreference-autocomplete.form-wrapper {
+    display: none;
+}
+
+.sidebar-first .content-inner {
+    margin-left: 15%;
+    margin-right: 0;
+}
+.region-sidebar-first {
+    width: 15%;
+    margin-left: 0;
+}

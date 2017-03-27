@@ -1,0 +1,47 @@
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select,
+  select:focus,
+  select:hover,
+  textarea,
+  textarea:focus,
+  textarea:hover,
+  input,
+  input:focus,
+  input:hover{
+    font-size: 16px !important;
+  }
+}
+
+input[type=radio].stars {
+  width: 25px;
+  height: 25px;
+  margin-right: 8px;
+  cursor: pointer;
+  font-size: 27px;
+  text-align: center;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+
+input[type=radio].stars:after {
+    content: "\2605";
+    background-color: #000;
+    border: 1px solid #000;
+    border-radius: 5px;
+    display: inline-block;
+    visibility: visible;
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    font-size: 27px;
+}
+
+input[type=radio]:checked.stars:after {
+    content: '\2605';
+    color: yellow;
+}
+
+input[type=radio].star-add:after{
+    color: yellow;
+}

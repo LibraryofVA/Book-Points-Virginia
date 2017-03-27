@@ -1,0 +1,11 @@
+name = Book Logs
+description = Shows a user's reader's books read
+core = 7.x
+package = Bookpoints
+version = 7.x-1.0-beta0319b
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = book_logs
+features_exclude[dependencies][ctools] = ctools
+project path = sites/all/modules/custom

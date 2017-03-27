@@ -1,0 +1,18 @@
+name = Library Dashboard Module
+description = A custom module containing various functionality for the Galicia Library Dashboard.
+package = "Galicia"
+stylesheets[all][] = /css/galicia.css
+
+
+
+
+
+; Information added by Drupal.org packaging script on 2016-10-25
+version = "7.x-1.x"
+core = "7.x"
+project = "library_dashboard"
+datestamp = "1426097283"
+
+
+
+

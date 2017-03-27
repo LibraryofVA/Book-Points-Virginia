@@ -1,0 +1,17 @@
+name = Bookpoints Importers
+core = 7.x
+package = Bookpoints
+version = 7.x-1.0-beta0320
+dependencies[] = ctools
+dependencies[] = eck
+dependencies[] = feeds
+dependencies[] = feeds_entity_processor
+features[ctools][] = feeds:feeds_importer_default:1
+features[features_api][] = api:2
+features[feeds_importer][] = import_activities
+features[feeds_importer][] = import_branches
+features[feeds_importer][] = import_prizes
+features[feeds_importer][] = import_schools
+features[feeds_importer][] = import_secret_codes
+features[feeds_importer][] = import_staff_accounts
+project path = sites/all/modules/custom
