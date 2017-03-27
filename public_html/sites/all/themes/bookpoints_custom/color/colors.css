@@ -280,3 +280,7 @@ fieldset {
 fieldset {
   border: 1px solid #e1e1e2;
 }
+/* Header wrapper */
+ #header-wrapper {
+   background-color: #c2e7f8;
+ }

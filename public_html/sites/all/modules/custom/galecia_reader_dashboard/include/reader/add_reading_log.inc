@@ -17,11 +17,11 @@ function galecia_reader_dashboard_theme($existing, $type, $theme, $path) {
 function reading_activity_form($form, &$form_state){
 
         $stars_options=array(
-            'One'=>t('One'),
-            'Two'=>t('Two'),
-            'Three'=>t('Three'),
-            'Four'=>t('Four'),
             'Five'=>t('Five'),
+            'Four'=>t('Four'),
+            'Three'=>t('Three'),
+            'Two'=>t('Two'),
+            'One'=>t('One'),
             );
 
   		$form['book']=array(
@@ -42,8 +42,8 @@ function reading_activity_form($form, &$form_state){
         $form['stars']=array(
         '#type' => 'radios',
         '#options' => $stars_options,
-        '#title' => t('Stars'),
-        '#description' => t('Rate this book!'),
+        '#title' => t('Rate this book!'),
+        '#description' => t(''),
         '#theme' => 'radios_before_element',
         );
 
