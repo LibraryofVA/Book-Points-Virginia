@@ -463,6 +463,10 @@ h1#page-title, .in-maintenance h1#page-title {
     display: none;
 }
 
+body.bookpoints-custom #header-wrapper {
+	margin-top:20px;
+}
+
 #main-content .content-style header {
     padding: 15px 30px 5px;
     background: #dadada;
@@ -743,7 +747,6 @@ td.views-field-field-badge-image img {
 #edit-stars  .form-radios > input + label {
     /* only enough room for the star */
     display: inline-block;
-    overflow: hidden;
     text-indent: 9999px;
     width: 28px;
     height: 28px;
