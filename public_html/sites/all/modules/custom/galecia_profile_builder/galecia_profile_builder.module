@@ -51,81 +51,70 @@ function galecia_profile_builder_form($form, &$form_state) {
 function getForm() {
 
     $form = array();
-    $step1 = array();
-    $step1['first_name']=array(
+    $step1['program']=array(
+ 		'#type' => 'radios',
+ 		'#title' => t('Choose a Program'),
+ 		'#options' => get_ents('program'),
+ 		'#theme' => 'program_radios_before_element',
+ 	);
+	$step1['submit']=array(
+  		'#type'=>'submit',
+  		'#value'=>t('Next'),
+  		'#attributes'=>array('class'=> array('step1'))
+ 	);
+	$form[] = $step1;
+	
+	$step2 = array();
+    $step2['first_name']=array(
         '#type'=>'textfield',
         '#title'=>t('First Name'),
         '#description'=>t("Enter your Reader's first name.")
-      );
-    $step1['last_name']=array(
+	);
+    $step2['last_name']=array(
         '#type'=>'textfield',
         '#title'=>t('Last Name'),
         '#description'=>t("Enter your Reader's last name or initial.")
-      );
-    $step1['age']=array(
+	);
+    $step2['age']=array(
         '#type'=>'textfield',
         '#title'=>t('Age'),
         '#description'=>t("Enter your reader's age.")
-      );
-
-     $grades = array(
-            'Headstart' => t('Headstart'),
-            'Pre-K' => t('Pre-K'),
-            'Kindergarten' => t('Kindergarten'),
-            'First' => t('First'),
-            'Second' => t('Second'),
-            'Third' => t('Third'),
-            'Fourth' => t('Fourth'),
-            'Fifth' => t('Fifth'),
-            'Sixth' => t('Sixth'),
-            'Seventh' => t('Seventh'),
-            'Eighth' => t('Eighth'),
-            'Ninth' => t('Ninth'),
-            'Tenth' => t('Tenth'),
-            'Eleventh' => t('Eleventh'),
-            'Twelfth' => t('Twelfth'),
-            'College' => t('College'),
-            'Not in School' => t('Not in School'),
-          );
-
-    $step1['grade']=array(
+	);
+	$grades = array(
+        'Headstart' => t('Headstart'),
+        'Pre-K' => t('Pre-K'),
+        'Kindergarten' => t('Kindergarten'),
+        'First' => t('First'),
+        'Second' => t('Second'),
+        'Third' => t('Third'),
+        'Fourth' => t('Fourth'),
+        'Fifth' => t('Fifth'),
+        'Sixth' => t('Sixth'),
+        'Seventh' => t('Seventh'),
+        'Eighth' => t('Eighth'),
+        'Ninth' => t('Ninth'),
+        'Tenth' => t('Tenth'),
+        'Eleventh' => t('Eleventh'),
+        'Twelfth' => t('Twelfth'),
+        'College' => t('College'),
+        'Not in School' => t('Not in School'),
+    );
+    $step2['grade']=array(
         '#type'=>'select',
         '#title'=>t('Grade'),
         '#options' => $grades,
         '#description'=>t("Select the last grade completed.")
-      );
-
-    $step1['school']=array(
+	);
+    $step2['school']=array(
         '#type' => 'select',
         '#title' => t('School'),
         '#options' => get_ents('school'),
         '#description' => t('Select the school last attended.')
-        );
-
-
-
-    $step1['submit']=array(
-        '#type'=>'submit',
-        '#value'=>t('Next')
-      );
-
-    $form[] = $step1;
-
-
-     $step2['program']=array(
-        '#type' => 'radios',
-        '#title' => t('Choose a Program'),
-        '#options' => get_ents('program'),
-        '#theme' => 'program_radios_before_element',
-        );
-
-
+	);
     $step2['submit']=array(
         '#type'=>'submit',
-        '#value'=>t('Next'),
-        '#attributes'=>array('class'=> array('step2'))
-      );
-
+        '#value'=>t('Next')
+	);
     $form[] = $step2;
 
 
@@ -146,18 +135,9 @@ function getForm() {
     return $form;
 }
 
- function galecia_profile_builder_form_validate($form, $form_state) {
-
-
-    if (!isset($form_state['storedvalues'][0]['age'])) {
-
-    $age=$form_state['values']['age'];
-
-    }
-
-    if($form_state['step'] == 0) {
-
-        if (!is_numeric($age)) {
+function galecia_profile_builder_form_validate($form, $form_state) {
+   if($form_state['step'] == 1) {
+        if (!is_numeric($form_state['values']['age'])) {
             form_set_error('age', t('You must use a number for the age'));
         }
 
