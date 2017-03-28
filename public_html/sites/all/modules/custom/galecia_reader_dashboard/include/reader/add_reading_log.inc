@@ -72,7 +72,7 @@ function reading_activity_form($form, &$form_state){
  function reading_activity_form_validate($form, $form_state) {
 
 
-    if ($form_state['input']['unit_type'] == 'Points Per Book') {
+    if ($form_state['input']['unit_type'] == 'Book') {
 
         if(empty($form_state['input']['book'])) {
             form_set_error('book', t('You must enter a book title!'));
