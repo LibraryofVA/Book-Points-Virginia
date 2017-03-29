@@ -111,8 +111,12 @@ function bookpoints_custom_preprocess_page(&$variables) {
   if ($path == 'galecia_profile_builder/wizard_form') {
     drupal_add_js(drupal_get_path('theme', 'bookpoints_custom') . '/js/custom.js');
   }
-
-    $path = current_path();
+  if ($path == 'family_profile_builder/wizard_form') {
+    drupal_add_js(drupal_get_path('theme', 'bookpoints_custom') . '/js/custom-family.js');
+  }
+  if ($path == 'group_profile_builder/wizard_form') {
+    drupal_add_js(drupal_get_path('theme', 'bookpoints_custom') . '/js/custom-group.js');
+  }
   if ($path == 'reader-dashboard') {
     drupal_add_js(drupal_get_path('theme', 'bookpoints_custom') . '/js/activity_button.js');
   }

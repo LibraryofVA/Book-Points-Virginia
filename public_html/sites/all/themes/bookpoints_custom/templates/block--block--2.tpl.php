@@ -24,13 +24,22 @@ foreach ($view->result as $key=>$value) {
 
 $readers_array[]=$value->id;
 }
+$groupview = views_get_view('groups');
+$groupview->set_display("block");
+$groupview->set_arguments($args_array);
+$groupview->pre_execute();
+$groupview->execute();
+
+foreach ($groupview->result as $key => $value) {
+	$readers_array[]=$value->id;
+}
 
 echo drupal_render($form);
 
 ?>
 
 <div id="left-panel-content">
-<h2 class="centered-text">Current Reader</h2>
+<h2 class="centered-text"><?php echo (count($readers_array)>1 ? 'Current Reader' : 'Reader'); ?></h2>
    <div id="tab-container">
       <ul>
         <?php 
@@ -50,8 +59,5 @@ echo drupal_render($form);
              echo "<li class='color-". $i ." reader-element " . $selected . "' data-reader-id=" . $value .">" . $entity->field_first_name['und'][0]['value']. "</li>";
           } ?>
       </ul>
-      <div class='add-reader'>
-      <a href='/reader/dashboard/profile/add'>Add Reader</a>
-      </div>
    </div>
 </div>

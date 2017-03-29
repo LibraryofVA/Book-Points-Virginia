@@ -27,6 +27,11 @@ $view->set_display("block");
 $view->set_arguments($args);
 $view->pre_execute();
 $view->execute();
+$groupview = views_get_view('groups');
+$groupview->set_display("block");
+$groupview->set_arguments($args);
+$groupview->pre_execute();
+$groupview->execute();
 
 $readers=array();
 
@@ -35,7 +40,9 @@ foreach ($view->result as $key => $value) {
     $readers[$value->id]=$value->field_field_first_name[0]['raw']['value'];
 
 }
-  
+foreach ($groupview->result as $key=>$value) {
+	$readers[$value->id]=$value->id;
+}  
   $form['reader']=array(
         '#type' => 'select',
         '#title' => t('Who is reading?'),

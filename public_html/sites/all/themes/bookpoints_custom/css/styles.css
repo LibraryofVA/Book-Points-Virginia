@@ -59,6 +59,10 @@ body {
 .step1 {
   visibility:hidden !important;
 }
+#altreg {
+	display: block;
+	padding-top:3em;
+}
 
 .three-col-table {
   width:33%;

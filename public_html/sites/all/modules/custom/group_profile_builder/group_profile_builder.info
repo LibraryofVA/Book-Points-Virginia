@@ -1,0 +1,4 @@
+name = Group Profile Builder
+description = This module will create a custom node form to add users and readers.
+core = 7.x
+package = Custom Forms

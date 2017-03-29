@@ -4,7 +4,7 @@
 * Implements hook_theme().
 */
 
-function galecia_profile_builder_theme($existing, $type, $theme, $path) {
+function family_profile_builder_theme($existing, $type, $theme, $path) {
 
   return array(
     'program_radios_before_element' => array(
@@ -23,17 +23,17 @@ function galecia_profile_builder_theme($existing, $type, $theme, $path) {
 * Implements hook_menu().
 */
 
-function galecia_profile_builder_menu() {
-  $items['galecia_profile_builder/wizard_form'] = array(
+function family_profile_builder_menu() {
+  $items['family_profile_builder/wizard_form'] = array(
     'type' => MENU_CALLBACK,
-    'title' => t('Add Reader'),
+    'title' => t('Add Family Readers'),
     'page callback' => 'drupal_get_form',
     'access arguments' => array('access content'),
-     'page arguments'=>array('galecia_profile_builder_form'));
+     'page arguments'=>array('family_profile_builder_form'));
   return $items;
 }
 
-function galecia_profile_builder_form($form, &$form_state) {
+function family_profile_builder_form($form, &$form_state) {
 
 
     if(isset($form_state['values'])) {
@@ -42,90 +42,116 @@ function galecia_profile_builder_form($form, &$form_state) {
         $currstep = 0;
     }
     $form_state['step'] = $currstep;
-	if(isset($form_state['values']['program'])) {
-		$programSelected = $form_state['values']['program'];
-	} else {
-		$programSelected = 0;
-	}
-    $allsteps = getForm($programSelected);
+    $allsteps = getFamilyForm();
     $currform =  $allsteps[$currstep];
 
     return $currform;
 }
 
-function getForm($programSelected) {
+function getFamilyForm() {
 
     $form = array();
-    $step1['program']=array(
- 		'#type' => 'radios',
- 		'#title' => t('Choose a Program'),
- 		'#options' => get_ents('program'),
- 		'#theme' => 'program_radios_before_element',
- 	);
-	$step1['submit']=array(
-  		'#type'=>'submit',
-  		'#value'=>t('Next'),
-  		'#attributes'=>array('class'=> array('step1'))
- 	);
-	$form[] = $step1;
 	
-	$loadedProgram = entity_load_single('program', $programSelected);
-	$programTitle = $loadedProgram->title;
-	$step2 = array();
+	$step1['program']=array(
+        '#type' => 'radios',
+        '#title' => t('Choose a Program'),
+        '#options' => get_familyEnts('program'),
+        '#theme' => 'program_radios_before_element',
+        );
+
+
+    $step1['submit']=array(
+        '#type'=>'submit',
+        '#value'=>t('Next'),
+        '#attributes'=>array('class'=> array('step1'))
+      );
+
+    $form[] = $step1;
+	
+    $step2 = array();
+    $step2['first_name']=array(
+        '#type'=>'textfield',
+        '#title'=>t('Nickname'),
+        '#description'=>t("Reader's first name or nickname goes here")
+      );
     $step2['age']=array(
         '#type'=>'textfield',
         '#title'=>t('Age'),
-        '#description'=>t("Enter your reader's age.")
-	);
-	$grades = array(
-        'Headstart' => t('Headstart'),
-        'Pre-K' => t('Pre-K'),
-        'Kindergarten' => t('Kindergarten'),
-        'First' => t('First'),
-        'Second' => t('Second'),
-        'Third' => t('Third'),
-        'Fourth' => t('Fourth'),
-        'Fifth' => t('Fifth'),
-        'Sixth' => t('Sixth'),
-        'Seventh' => t('Seventh'),
-        'Eighth' => t('Eighth'),
-        'Ninth' => t('Ninth'),
-        'Tenth' => t('Tenth'),
-        'Eleventh' => t('Eleventh'),
-        'Twelfth' => t('Twelfth'),
-        'College' => t('College'),
-        'Not in School' => t('Not in School'),
-    );
+        '#description'=>t("Reader's age goes here")
+      );
+
+     $grades = array(
+            'Headstart' => t('Headstart'),
+            'Pre-K' => t('Pre-K'),
+            'Kindergarten' => t('Kindergarten'),
+            'First' => t('First'),
+            'Second' => t('Second'),
+            'Third' => t('Third'),
+            'Fourth' => t('Fourth'),
+            'Fifth' => t('Fifth'),
+            'Sixth' => t('Sixth'),
+            'Seventh' => t('Seventh'),
+            'Eighth' => t('Eighth'),
+            'Ninth' => t('Ninth'),
+            'Tenth' => t('Tenth'),
+            'Eleventh' => t('Eleventh'),
+            'Twelfth' => t('Twelfth'),
+            'College' => t('College'),
+            'Not in School' => t('Not in School'),
+          );
+
     $step2['grade']=array(
         '#type'=>'select',
         '#title'=>t('Grade'),
         '#options' => $grades,
-        '#description'=>t("Select the last grade completed.")
-	);
+        '#description'=>t("Reader's grade goes here")
+      );
+
     $step2['school']=array(
         '#type' => 'select',
         '#title' => t('School'),
-        '#options' => get_ents('school'),
-        '#description' => t('Select the school last attended.')
-	);
+        '#options' => get_familyEnts('school'),
+        '#description' => t('Select your school')
+        );
+
+
+
     $step2['submit']=array(
         '#type'=>'submit',
         '#value'=>t('Next')
-	);
-	if(isset($programTitle)){
-		if($programTitle == 'Adults') {
-			$step2['text']=array(
-			'#markup'=>'<div id="altreg">If you would like to register multiple readers under one account do not fill out the above form but instead use our <a href="/family_profile_builder/wizard_form">Family Registration</a> process. If you are the organizer of a reading group please use our <a href="/group_profile_builder/wizard_form">Group Registration</a> process instead of completing the form above.</div>'
-	  		);
-		}
-	}
+      );
+
     $form[] = $step2;
+
+
+    $step3['new_reader']=array(
+        '#type'=>'radios',
+        '#title'=>t('Do you want to add another Reader?'),
+        '#options'=>array('Yes','No')
+      );
+
+
+    $step3['submit']=array(
+        '#type'=>'submit',
+        '#value'=>t('Next')
+      );
+
+    $form[] = $step3;
 
     return $form;
 }
 
-function galecia_profile_builder_form_validate($form, $form_state) {
-   if($form_state['step'] == 1) {
+ function family_profile_builder_form_validate($form, $form_state) {
+
+
+ /*   if (!isset($form_state['storedvalues'][0]['age'])) {
+
+    $age=$form_state['values']['age'];
+
+    }
+*/
+    if($form_state['step'] == 1) {
+
         if (!is_numeric($form_state['values']['age'])) {
             form_set_error('age', t('You must use a number for the age'));
         }
@@ -137,7 +163,7 @@ function galecia_profile_builder_form_validate($form, $form_state) {
 }
 
 
-function galecia_profile_builder_form_submit($form, &$form_state) {
+function family_profile_builder_form_submit($form, &$form_state) {
 
   $mydate=getdate(date("U"));
     $current_date="$mydate[weekday], $mydate[month] $mydate[mday], $mydate[year]";
@@ -146,7 +172,7 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
 
 
     $form_state['storedvalues'][$form_state['step']] = $form_state['values'];
-    if($form_state['step'] + 1 != getNumberOfSteps()) {
+    if($form_state['step'] + 1 != getNumberOfFamilySteps()) {
         $form_state['rebuild'] = TRUE;
     }else {
 
@@ -155,7 +181,7 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
 
         $finalformvalues['new_reader']=0;
         $currStep = 0;
-        foreach (getForm('0') as $step) {
+        foreach (getFamilyForm() as $step) {
             foreach ($step as $key => $value) {
                 if(strcmp($key,"submit") != 0) {
                     $finalformvalues[$key] = $form_state['storedvalues'][$currStep][$key];
@@ -178,8 +204,8 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
         $entity = entity_create($entity_type, array('type' => 'reader'));
         $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
-        $wrapper->field_first_name = $current_user->name;
-        $wrapper->title = $current_user->name;
+        $wrapper->field_first_name = $finalformvalues['first_name'];
+        $wrapper->title = $finalformvalues['first_name'];
         $wrapper->field_age = $finalformvalues['age'];
         $wrapper->field_grade = $finalformvalues['grade'];
         $wrapper->field_reader_school = $finalformvalues['school'];
@@ -187,7 +213,7 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
         $wrapper->field_program->set(array($finalformvalues['program']));
         // $wrapper->field_current_program->set(array($finalformvalues['program']));
 
-        $program_level=level_getter($finalformvalues['program']);
+        $program_level=level_FamilyGetter($finalformvalues['program']);
 
        
 
@@ -211,8 +237,16 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
 
       
 
-      $prize_name=$prize->title;
-      $prize_status=$prize->field_prize_status['und'][0]['value'];
+      if(!empty($prize->field_prize_name['und'][0]['value'])){
+		 $prize_name=$prize->field_prize_name['und'][0]['value'];
+	  } else {
+		 $prize_name="";
+	  }
+	  if(!empty($prize->field_prize_status['und'][0]['value'])){
+      	$prize_status=$prize->field_prize_status['und'][0]['value'];
+	  } else {
+		$prize_status="";
+	  }
       $prize_id=$prize->id;
       $prize_program=array($loaded_level->field_program_reference['und'][0]['target_id']);
       $prize_level=array($loaded_level);
@@ -291,7 +325,12 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
 
     }
 
-    if ($form_state['step'] + 1 == getNumberOfSteps()) {
+    if (!empty($finalformvalues)) {
+
+    $continue=$finalformvalues['new_reader'];
+    }
+
+    if ($continue == 1) {
         drupal_goto('reader-dashboard');
     }
 
@@ -299,11 +338,11 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
 }
 
 
-function getNumberOfSteps() {
-    return count(getForm('0'));
+function getNumberOfFamilySteps() {
+    return count(getFamilyForm());
 }
 
-function get_tax($vocabulary) {
+function get_FamilyTax($vocabulary) {
   $terms = taxonomy_get_tree($vocabulary);
 
   foreach ($terms as $data) {
@@ -313,7 +352,7 @@ function get_tax($vocabulary) {
   return $output;
 }
 
-function get_ents($entities) {
+function get_familyEnts($entities) {
   $ents = entity_load($entities, FALSE, array(), TRUE);
   $output=array();
 
@@ -329,7 +368,7 @@ function get_ents($entities) {
   return $output;
 }
 
-function level_getter($program) {
+function level_FamilyGetter($program) {
   $ents = entity_load('level', FALSE, array(), TRUE);
   $output=array();
 
