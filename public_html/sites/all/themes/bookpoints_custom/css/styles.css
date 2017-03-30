@@ -43,13 +43,18 @@ body {
 .program-buttons,  
 .program-buttons:hover,
 .program-buttons:focus {
-  white-space:normal !important;
-  background:none !important; 
-  color:#086782; 
-  border:none; padding:0 !important; 
-  font:inherit; 
-  font-size:1.5em !important; 
-  cursor:pointer
+    white-space: normal !important;
+    color: #fff;
+    padding: 10px 16px;
+    font: inherit;
+    font-size: 1.5em !important;
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: #337ab7;
+    border: 1px solid transparent;
+}
+.program-buttons:hover {
+	border: 1px solid #bbb;
 }
 
 .program-blocks .form-radio {
@@ -510,6 +515,7 @@ fieldset legend {
 
 td.views-field-edit-link a,
 td.views-field-edit-node a,
+td.views-field-id-1 a,
 .add-reader a,
 button, 
 .my-views-filter-reset, 
@@ -578,7 +584,8 @@ textarea {
 }
 
 td.views-field-edit-node a, 
-td.views-field-edit-link a {
+td.views-field-edit-link a,
+td.views-field-id-1 a{
     color: #fff;
     background-color: #7d7d7d;
     border-color: #adacab;
@@ -800,4 +807,3 @@ th.views-field-edit-link {
     font-size: 0;
 }
 
-    
