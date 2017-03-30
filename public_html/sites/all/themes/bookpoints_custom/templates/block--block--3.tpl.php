@@ -19,7 +19,7 @@ $current_reader_fname=$entity->field_first_name['und'][0]['value'];
 
 <div>
 
-<h2 class='centered-text'><?php echo t($current_reader_fname); echo t(" - Book Log"); ?></h2>
+<h2 class='centered-text'>Track Your Reading</h2>
 
    <?php print drupal_render($form); ?>
 </div>
