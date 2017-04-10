@@ -183,7 +183,7 @@ function galecia_reader_dashboard_form_alter(&$form, &$form_state, $form_id) {
 
 		$points_per_unit = $program->field_per_unit_point_value['und'][0]['value'];
 
-		if ($unit_label == 'Book') {
+		if (($unit_label == 'Book') && (user_has_role(4))) {
 			$form['units']['#type'] = 'hidden';
 
 			$form['units']['#value'] = 1;
