@@ -46,6 +46,27 @@ $code_form=drupal_get_form('code_search_form');
 	  <br>
 	</div>
 	<div>
+	<?php 
+		if(empty($current_loaded_reader->field_quiz_status['und'][0]['value'])) {
+			if($current_loaded_reader->field_grade['und'][0]['value'] == 'Third') {
+				echo ('<h6>Challenge yourself!</h6><a href="/quiz31">Take the reading challenge!</a>');
+			}
+			if($current_loaded_reader->field_grade['und'][0]['value'] == 'Fifth') {
+				echo ('<h6>Challenge yourself!</h6><a href="/quiz51">Take the reading challenge!</a>');
+			}
+		} else {
+			if(($current_loaded_reader->field_quiz_status['und'][0]['value'] == 'pre-done') && (strtotime("15 July 2017") < time())) {
+				if($current_loaded_reader->field_grade['und'][0]['value'] == 'Third') {
+					echo ('<h6>Challenge yourself!</h6><a href="/quiz32">Take a new reading challenge!</a>');
+				}
+				if($current_loaded_reader->field_grade['und'][0]['value'] == 'Fifth') {
+					echo ('<h6>Challenge yourself!</h6><a href="/quiz52">Take a new reading challenge!</a>');
+				}
+			}
+		}
+	?>
+	</div>
+	<div>
 	<?php print drupal_render($code_form); ?>
 	</div> 
 	<?php 
@@ -65,24 +86,18 @@ $code_form=drupal_get_form('code_search_form');
 
 
 	foreach($view2->result as $key=>$value) { 
-
-
+	  $id=$value->id;
+	  if (!in_array($id, $claimed_array)) {
 		$title=$value->eck_activity_title;
 		$description=$value->field_field_activity_description[0]['rendered']['#markup'];
-		$id=$value->id;
 		$status=t('Claim');
 		$enabled='';
-
-		if (in_array($id, $claimed_array)) {
-			$status=t('Claimed');
-			$enabled='disabled';
-		}
-
 		$str="<div><h6>". $title ."</h6><div>";
 		$str.= $description;
 		$str.= "</div><button class='activity-button' name='" . $status . " id='act_button" . $id . "' data-reader='" . $current_loaded_reader_id . "' data-activity='" . $id . "' value='" . $status . "'" . $enabled .">" .$status . "</button>";
 		$str.= "</div><br><div id='ajax-target'></div>";
 		echo $str;
+	  }
 	}
 	?>
 </div>  
