@@ -70,7 +70,11 @@ function getForm($programSelected) {
 	$form[] = $step1;
 	
 	$loadedProgram = entity_load_single('program', $programSelected);
-	$programTitle = $loadedProgram->title;
+	if(isset($loadedProgram)) {
+		if($loadedProgram != '0') {
+			$altReg = $loadedProgram->field_allow_alt_registration['und'][0]['value'];
+		}
+	}
 	$step2 = array();
     $step2['age']=array(
         '#type'=>'textfield',
@@ -112,8 +116,8 @@ function getForm($programSelected) {
         '#type'=>'submit',
         '#value'=>t('Next')
 	);
-	if(isset($programTitle)){
-		if($programTitle == 'Adults') {
+	if(isset($altReg)){
+		if($altReg == 1) {
 			$step2['text']=array(
 			'#markup'=>'<div id="altreg">If you would like to register multiple readers under one account do not fill out the above form but instead use our <a href="/family_profile_builder/wizard_form">Family Registration</a> process. If you are the organizer of a reading group please use our <a href="/group_profile_builder/wizard_form">Group Registration</a> process instead of completing the form above.</div>'
 	  		);
