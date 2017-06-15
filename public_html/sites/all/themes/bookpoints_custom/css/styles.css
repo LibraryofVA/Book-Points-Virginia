@@ -23,6 +23,10 @@ body {
   float:left;width:50%;
   margin-bottom:15px
 }
+
+.program-description {
+	margin-right:30px;
+}
  
 @media only screen and (max-width: 764px) {
   .program-blocks {
@@ -106,6 +110,12 @@ body {
 #reader-dashboard .region-three-33-second, 
 #reader-dashboard .region-three-33-third {
     width: 37%;
+}
+body.not-logged-in div.three-3x33 div.region-three-33-second div.region-inner section {
+	margin-right: 25px;
+}
+body.not-logged-in div.three-3x33 div.region-three-33-first div.region-inner section {
+	margin-right:20px;
 }
 
 #reader-dashboard #tab-container,
@@ -484,6 +494,10 @@ body.bookpoints-custom #header-wrapper {
     -khtml-border: 6px 6px 0 0;
     border-radius: 6px 6px 0 0;
     margin: 0;
+}
+#main-content .content-style div.node-inner header.node-header {
+	background: none;
+	border:none;
 }
 
 #main-content .content-style #content {
