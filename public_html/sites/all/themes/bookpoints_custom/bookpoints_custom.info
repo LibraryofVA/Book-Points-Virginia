@@ -45,7 +45,7 @@
 
   ; If you need to add JavaScript or other scripts you can add them here. Normal
   ; syntax is scripts[] = path/to/file, e.g.
-  ; scripts[] = scripts/myscript.js
+    scripts[] = js/custom2.js
     scripts[] = js/stars.js
   ; Internet Explorer Scripts
   ;

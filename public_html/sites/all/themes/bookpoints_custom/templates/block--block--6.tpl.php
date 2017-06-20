@@ -20,8 +20,8 @@ $uris_array[]=$value->field_field_badge_image[0]['raw']['uri'];
 }
 
 ?>
-
-<div>
+<div id="view-badges-mobile" class="button">View Your Badges</div>
+<div id="badges-box">
 
   <?php 
 

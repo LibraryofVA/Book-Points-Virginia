@@ -40,10 +40,9 @@ $current_points=array_sum($allpoints);
 $code_form=drupal_get_form('code_search_form');
 
 ?>
-<div>
-	<div>
-	  <h2 style='text-align:center'><?php echo $current_points; ?> pts</h2>
-	  <br>
+<div id="activities-block">
+	<div class="activities-block-header">
+	  <h2><?php echo $current_points; ?> pts</h2>
 	</div>
 	<div>
 	<?php 
@@ -66,9 +65,11 @@ $code_form=drupal_get_form('code_search_form');
 		}
 	?>
 	</div>
-	<div>
+	<div class="activities-block-content">
 	<?php print drupal_render($code_form); ?>
-	</div> 
+	</div>
+        <h3>Your Activity</h3>
+        <div id="activities-panel">
 	<?php 
 
 		$claimed_array=array();
@@ -86,18 +87,25 @@ $code_form=drupal_get_form('code_search_form');
 
 
 	foreach($view2->result as $key=>$value) { 
-	  $id=$value->id;
-	  if (!in_array($id, $claimed_array)) {
+
+
 		$title=$value->eck_activity_title;
 		$description=$value->field_field_activity_description[0]['rendered']['#markup'];
+		$id=$value->id;
 		$status=t('Claim');
 		$enabled='';
+
+		if (in_array($id, $claimed_array)) {
+			$status=t('Claimed');
+			$enabled='disabled';
+		}
+
 		$str="<div><h6>". $title ."</h6><div>";
 		$str.= $description;
 		$str.= "</div><button class='activity-button' name='" . $status . " id='act_button" . $id . "' data-reader='" . $current_loaded_reader_id . "' data-activity='" . $id . "' value='" . $status . "'" . $enabled .">" .$status . "</button>";
 		$str.= "</div><br><div id='ajax-target'></div>";
 		echo $str;
-	  }
 	}
 	?>
+      </div>
 </div>  

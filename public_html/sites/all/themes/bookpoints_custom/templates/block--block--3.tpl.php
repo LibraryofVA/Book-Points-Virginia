@@ -17,7 +17,7 @@ $current_reader_fname=$entity->field_first_name['und'][0]['value'];
 
 ?>     
 
-<div>
+<div id="book-log-entry-block">
 
 <h2 class='centered-text'>Track Your Reading</h2>
 

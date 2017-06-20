@@ -9,7 +9,6 @@ body.corolla .color-form {
 
 /* Text */
 body,
-#site-name a,
 h1.page-title,
 .node h2.node-title,
 .node h1.node-title a,
@@ -24,17 +23,22 @@ table.update tr,
 table.system-status-report tr {
   color: #2e2e2e;
 }
+
+/* Site Name */
+#site-name a {
+  color: #fefefe;
+}
 #site-name a::-moz-selection {
-  background-color: #2e2e2e;
+  color: #fefefe;
 }
 #site-name a::selection {
-  background-color: #2e2e2e;
+  color: #fefefe;
 }
 .node-title a::-moz-selection {
-  background-color: #2e2e2e;
+  color: #fefefe;
 }
 .node-title a::selection {
-  background-color: #2e2e2e;
+  color: #fefefe;
 }
 
 /* Links */
@@ -231,7 +235,9 @@ textarea:focus {
   border: 1px solid #e1e1e1;
 }
 
-/* Region block borders (uncomment to enable).
+/body {
+    background: #e8e8e8;
+}* Region block borders (uncomment to enable).
    The rounded corners are already accounted for in corolla.settings.style.css */
 /*
 .sidebar .block-inner,
@@ -259,8 +265,10 @@ ul.vertical-tabs-list li a {
 }
 
 /* Block title */
-.block h2,
-h2 {
+.block h2.block-title,
+hbody {
+    background: #e8e8e8;
+}2 {
   color: #779125;
 }
 .block h2::selection {
@@ -280,7 +288,8 @@ fieldset {
 fieldset {
   border: 1px solid #e1e1e2;
 }
+
 /* Header wrapper */
- #header-wrapper {
-   background-color: #c2e7f8;
- }
+#header-wrapper {
+  background-color: #c2e7f8;
+}
