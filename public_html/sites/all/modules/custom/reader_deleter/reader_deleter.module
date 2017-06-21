@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Reader Deleter feature.
+ */
+
+include_once 'reader_deleter.features.inc';

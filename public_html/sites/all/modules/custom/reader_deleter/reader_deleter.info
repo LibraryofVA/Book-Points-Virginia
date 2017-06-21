@@ -1,0 +1,12 @@
+name = Reader Deleter
+description = Provides a safe "reader deletion" widget
+core = 7.x
+package = Bookpoints
+version = 7.x-1.0-beta0531
+dependencies[] = page_manager
+dependencies[] = views
+features[ctools][] = page_manager:pages_default:1
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[page_manager_pages][] = reader_deleter
+features[views_view][] = reader_deleter
