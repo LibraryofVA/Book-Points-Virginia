@@ -34,8 +34,11 @@ function reader_deleter_views_default_views() {
   $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
-  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '100';
   $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'id' => 'id',
@@ -251,6 +254,14 @@ Check boxes and click "DELETE READER" button to delete several at once.  Otherwi
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['relationship'] = 'field_parent_uid_target_id';
   $handler->display->display_options['fields']['name']['label'] = 'Parent';
+  /* Field: Reader: Current Points */
+  $handler->display->display_options['fields']['field_current_points']['id'] = 'field_current_points';
+  $handler->display->display_options['fields']['field_current_points']['table'] = 'field_data_field_current_points';
+  $handler->display->display_options['fields']['field_current_points']['field'] = 'field_current_points';
+  $handler->display->display_options['fields']['field_current_points']['settings'] = array(
+    'thousand_separator' => ',',
+    'prefix_suffix' => 1,
+  );
   /* Field: Reader: Delete link */
   $handler->display->display_options['fields']['delete_link']['id'] = 'delete_link';
   $handler->display->display_options['fields']['delete_link']['table'] = 'eck_reader';
