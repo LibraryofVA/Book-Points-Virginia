@@ -8,109 +8,103 @@ function galecia_model_user_delete ($account) {
 
 	$uid=$account->uid;
 
-	$readers=entity_load('reader');
+	$reader_query = new EntityFieldQuery();
+	  $reader_query->entityCondition('entity_type', 'reader')
+		->fieldCondition('field_parent_uid', 'target_id', $uid, '=');
+		$reader_query = $reader_query->execute();
 
-	$user_readers=array();
+		$readers=array();
+		if(!empty($reader_query)){
+	  foreach($reader_query['reader'] as $key=>$value) {
+	$readers[]=$value->id;
+	  }
 
-	foreach($readers as $key => $value) {
+	if(!empty($readers)){
 
-		if($value->uid == $uid) {
+	  entity_delete_multiple('reader',$readers);
 
-			$user_readers[]=$value->id;
-		}
+
+	foreach ($readers as $key=>$value) {
+
+	$reading_log_query = new EntityFieldQuery();
+	  $reading_log_query->entityCondition('entity_type', 'reading_log')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reading_log_query = $reading_log_query->execute();
+
+	  $logs=array();
+
+	  if(!empty($reading_log_query['reading_log'])) {
+
+	  foreach($reading_log_query['reading_log'] as
+	$reading_log_key=>$reading_log_value){
+		entity_delete('reading_log', $reading_log_value->id);
+	  }
 	}
 
-	if(!empty($user_readers)) {
+	$points_query = new EntityFieldQuery();
+	  $points_query->entityCondition('entity_type', 'points')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $points_query = $points_query->execute();
 
-	entity_delete_multiple('reader', $user_readers);
+	  if(!empty($points_query['points'])) {
 
+	  foreach($points_query['points'] as $points_key=>$points_value){
+		entity_delete('points', $points_value->id);
+	  }
 	}
 
-	$reading_logs=entity_load('reading_log');
+	$reader_prize_query = new EntityFieldQuery();
+	  $reader_prize_query->entityCondition('entity_type', 'reader_prize')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reader_prize_query = $reader_prize_query->execute();
 
-	$user_logs=array();
-
-	foreach($reading_logs as $key => $value) {
-		if($value->uid == $uid) {
-
-			$user_logs[]=$value->id;
-		}
+	  if(!empty($reader_prize_query['reader_prize'])) {
+	  foreach($reader_prize_query['reader_prize'] as
+	$reader_prize_key=>$reader_prize_value){
+		entity_delete('reader_prize', $reader_prize_value->id);
+	  }
 	}
 
-	if(!empty($user_logs)) {
+	$reader_badge_query = new EntityFieldQuery();
+	  $reader_badge_query->entityCondition('entity_type', 'reader_badge')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reader_badge_query = $reader_badge_query->execute();
 
-	entity_delete_multiple('reading_log', $user_logs);
-
+	  if(!empty($reader_badge_query['reader_badge'])) {
+	  foreach($reader_badge_query['reader_badge'] as
+	$reader_badge_key=>$reader_badge_value){
+		entity_delete('reader_badge', $reader_badge_value->id);
+	  }
 	}
 
-	$points=entity_load("points");
+	$reader_ticket_query = new EntityFieldQuery();
+	  $reader_ticket_query->entityCondition('entity_type', 'reader_ticket')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reader_ticket_query = $reader_ticket_query->execute();
 
-	$user_points=array();
-
-	foreach($points as $key => $value) {
-		if($value->uid == $uid) {
-
-			$user_points[]=$value->id;
-		}
+	  if(!empty($reader_ticket_query['reader_ticket'])) {
+	  foreach($reader_ticket_query['reader_ticket'] as
+	$reader_ticket_key=>$reader_ticket_value){
+		entity_delete('reader_ticket', $reader_ticket_value->id);
+	  }
 	}
 
-	if(!empty($user_points)) {
+	  $activity_log_query = new EntityFieldQuery();
+	  $activity_log_query->entityCondition('entity_type', 'activity_log')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $activity_log_query = $activity_log_query->execute();
 
-	entity_delete_multiple('points', $user_points);
-
+	  if(!empty($activity_log_query['activity_log'])) {
+	  foreach($activity_log_query['activity_log'] as
+	$activity_log_key=>$activity_log_value){
+		entity_delete('activity_log', $activity_log_value->id);
+	  }
 	}
 
-	$reader_prizes=entity_load("reader_prize");
-
-	$user_prizes=array();
-
-	foreach($reader_prizes as $key => $value) {
-		if($value->uid == $uid) {
-
-			$user_prizes[]=$value->id;
-		}
+	}
 	}
 
-	if(!empty($user_prizes)) {
-
-	entity_delete_multiple('reader_prize', $user_prizes);
-
 	}
-
-	$reader_badges=entity_load("reader_badge");
-
-	$user_badges=array();
-
-	foreach($reader_badges as $key => $value) {
-		if($value->uid == $uid) {
-
-			$user_badges[]=$value->id;
-		}
-	}
-
-	if(!empty($user_badges)) {
-
-	entity_delete_multiple('reader_badge', $user_badges);
-
-	}
-
-	$reader_tickets=entity_load("reader_ticket");
-
-	$user_tickets=array();
-
-	foreach($reader_tickets as $key => $value) {
-		if($value->uid == $uid) {
-
-			$user_tickets[]=$value->id;
-		}
-	}
-
-	if(!empty($user_tickets)) {
-
-	entity_delete_multiple('reader_ticket', $user_tickets);
-
-	}
-
 }
 
 
@@ -255,152 +249,13 @@ function galecia_model_entity_presave($entity, $type) {
 
 
 function galecia_model_entity_update($entity, $type) {
+
 	if ($type === 'reading_log' && $entity->type === 'reading_log' && (!empty($entity->field_points_reference))) {
 
 
-		$mydate=getdate(date("U"));
-		$current_date="$mydate[weekday], $mydate[month] $mydate[mday], $mydate[year]";
-
 		$reader_ref=$entity->field_readers['und'][0]['target_id'];
 
-		$reader=entity_load_single('reader', $reader_ref);
-
-
-		$reader_fname=$reader->field_first_name['und'][0]['value'];
-
-		$reader_lname=$reader->field_last_name['und'][0]['value'];
-
-		$current_level=$reader->field_current_level['und'][0]['target_id'];
-		$new_level=$current_level;
-       $current_points=$reader->field_current_points['und'][0]['value'];
-       $current_program=$reader->field_program['und'][0]['target_id'];
-
-       // $loaded_program= $level=entity_load_single('program', $current_program);
-
-
-        $level=entity_load('level');
-
-        $matching_levels=array();
-
-
-        foreach ($level as $key => $value) {
-            if ($value->field_program_reference['und'][0]['target_id'] == $current_program) {
-
-                $matching_levels[]=$value;
-            }
-        }
-
-        if(!empty($matching_levels)) {
-
-        $first_level=array_shift($matching_levels);
-
-        $new_matching_levels=$matching_levels;
-
-        foreach($new_matching_levels as $key=>$value) {
-        	if ($current_points>=$value->field_point_threshold['und'][0]['value']){
-        		$new_level=$value->id;
-
-        	}
-
-		    	$level_check=$reader->field_current_level['und'][0]['target_id'];
-
-		    	$updated_level=$new_level;
-
-
-		    	if($updated_level > $level_check) {
-
-
-
-		    	$loaded_level=entity_load_single('level', $updated_level);
-
-
-
-		    	if(!empty($loaded_level->field_prize_reference['und'][0]['target_id'])){
-
-
-		    	$prize=entity_load_single('prize', $loaded_level->field_prize_reference['und'][0]['target_id']);
-
-		    	$prize_reference=$loaded_level->field_prize_reference['und'][0]['target_id'];
-
-		    	
-
-		    	$prize_name=$prize->title;
-		    	$prize_status= t('Unclaimed');
-		    	$prize_id=$prize->id;
-		    	$prize_program=array($loaded_level->field_program_reference['und'][0]['target_id']);
-		    	$prize_level=array($loaded_level);
-
-
-		    	$reader_prize_type = 'reader_prize';
-
-		    	$loaded_prize = entity_load_single('prize' , $prize_id);
-		    	$prize_text = $loaded_prize->field_prize_message['und'][0]['value'];
-
-		  		$reader_prize = entity_create($reader_prize_type, array('type' => 'reader_prize'));
-		  		$wrapper = entity_metadata_wrapper($reader_prize_type, $reader_prize);
-		  		$wrapper->title = $prize_name . t(' for ') . $reader_fname . " " . $reader_lname;
-		  		$wrapper->field_status = $prize_status;
-		  		$wrapper->field_readers = array($reader->id);
-		  		$wrapper->field_program_reference = $prize_program;
-		  		$wrapper->field_level = $prize_level;
-		  		$wrapper->field_prize_reference = $prize_reference;
-		  		$wrapper->field_prize_message = $prize_text;
-		  		$wrapper->save();
-
-		  		}
-
-		  		if(!empty($loaded_level->field_reader_badge['und'][0]['target_id'])){
-
-
-		    	$level_badge=$loaded_level->field_reader_badge['und'][0]['target_id'];
-		    	
-		    	$reader_badge_type = 'reader_badge';
-
-		    	$loaded_badge = entity_load_single('badge' , $level_badge);
-		    	$badge_text = $loaded_badge->field_badge_message['und'][0]['value'];
-		  		$reader_badge = entity_create($reader_badge_type, array('type' => 'reader_badge'));
-		  		$wrapper = entity_metadata_wrapper($reader_badge_type, $reader_badge);
-		  		$wrapper->field_readers = array($reader->id);
-		  		$wrapper->field_reader_badge = $level_badge;
-		  		$wrapper->field_badge_message = $badge_text;
-		  		$wrapper->save();
-
-		  		}
-
-		  		if(!empty($loaded_level->field_drawing_tickets)) {
-
-		    	$level_tickets=$loaded_level->field_drawing_tickets['und'][0]['value'];
-		    	}
-
-		    	else {
-		    		$level_tickets=0;
-		    	}
-
-			    	for($i=1; $i <= $level_tickets; $i++) {
-
-			    	$reader_ticket_type = 'reader_ticket';
-			  		$reader_ticket = entity_create($reader_ticket_type, array('type' => 'reader_ticket'));
-			  		$wrapper = entity_metadata_wrapper($reader_ticket_type, $reader_ticket);
-			  		$wrapper->field_readers = array($reader->id);
-			  		$wrapper->title = t('Drawing Ticket ') . $i . t(' on ') . $current_date . t(' for ') . $reader_fname . " " . $reader_lname;
-			  		$wrapper->field_readers = array($reader->id);
-			  		$wrapper->field_level = $prize_level;
-			  		$wrapper->field_ticket_status = t('Not Drawn');
-			  		$wrapper->save();
-
-		  			}
-
-
-		  			if($reader->field_current_level['und'][0]['target_id']<$updated_level) {
-
-		  				$reader->field_current_level['und'][0]['target_id']=$updated_level;
-
-		        		entity_save('reader', $reader);
-		        	}
-		        }
-		}
-
-    		}
+		galecia_model_leveler($reader_ref);
 
 	}
 }
@@ -543,6 +398,8 @@ function galecia_model_create_activity_log ($reader, $activity) {
 
                      entity_save('reader', $readers);
 
+                     galecia_model_leveler($reader);
+
                      drupal_set_message(t('You added an activity!'));
 }
 
@@ -551,9 +408,249 @@ function galecia_model_create_activity_log_callback($page_callback_result){
 	return "<h3>Success</h3>";
 }
 
+function galecia_model_leveler ($reader) {
+
+	$mydate=getdate(date("U"));
+		$current_date="$mydate[weekday], $mydate[month] $mydate[mday], $mydate[year]";
+
+		$reader_ref=$reader;
+
+		$reader=entity_load_single('reader', $reader_ref);
+
+
+		$reader_fname=$reader->field_first_name['und'][0]['value'];
+
+		$reader_lname=$reader->field_last_name['und'][0]['value'];
+
+		$current_level=$reader->field_current_level['und'][0]['target_id'];
+		$new_level=$current_level;
+       $current_points=$reader->field_current_points['und'][0]['value'];
+       $current_program=$reader->field_program['und'][0]['target_id'];
+
+       // $loaded_program= $level=entity_load_single('program', $current_program);
+
+
+        $level=entity_load('level');
+
+        $matching_levels=array();
+
+
+        foreach ($level as $key => $value) {
+            if ($value->field_program_reference['und'][0]['target_id'] == $current_program) {
+
+                $matching_levels[]=$value;
+            }
+        }
+
+        if(!empty($matching_levels)) {
+
+        $first_level=array_shift($matching_levels);
+
+        $new_matching_levels=$matching_levels;
+
+        foreach($new_matching_levels as $key=>$value) {
+        	if ($current_points>=$value->field_point_threshold['und'][0]['value']){
+        		$new_level=$value->id;
+
+        	}
+
+		    	$level_check=$reader->field_current_level['und'][0]['target_id'];
+
+		    	$updated_level=$new_level;
+
+
+		    	if($updated_level > $level_check) {
+
+
+
+		    	$loaded_level=entity_load_single('level', $updated_level);
+
+
+
+		    	if(!empty($loaded_level->field_prize_reference['und'][0]['target_id'])){
+
+
+		    	$prize=entity_load_single('prize', $loaded_level->field_prize_reference['und'][0]['target_id']);
+
+		    	$prize_reference=$loaded_level->field_prize_reference['und'][0]['target_id'];
+
+		    	
+
+		    	$prize_name=$prize->title;
+		    	$prize_status= t('Unclaimed');
+		    	$prize_id=$prize->id;
+		    	$prize_program=array($loaded_level->field_program_reference['und'][0]['target_id']);
+		    	$prize_level=array($loaded_level);
+
+
+		    	$reader_prize_type = 'reader_prize';
+
+		    	$loaded_prize = entity_load_single('prize' , $prize_id);
+		    	$prize_text = $loaded_prize->field_prize_message['und'][0]['value'];
+
+		  		$reader_prize = entity_create($reader_prize_type, array('type' => 'reader_prize'));
+		  		$wrapper = entity_metadata_wrapper($reader_prize_type, $reader_prize);
+		  		$wrapper->title = $prize_name . t(' for ') . $reader_fname . " " . $reader_lname;
+		  		$wrapper->field_status = $prize_status;
+		  		$wrapper->field_readers = array($reader->id);
+		  		$wrapper->field_program_reference = $prize_program;
+		  		$wrapper->field_level = $prize_level;
+		  		$wrapper->field_prize_reference = $prize_reference;
+		  		$wrapper->field_prize_message = $prize_text;
+		  		$wrapper->save();
+
+		  		}
+
+		  		if(!empty($loaded_level->field_reader_badge['und'][0]['target_id'])){
+
+
+		    	$level_badge=$loaded_level->field_reader_badge['und'][0]['target_id'];
+		    	
+		    	$reader_badge_type = 'reader_badge';
+
+		    	$loaded_badge = entity_load_single('badge' , $level_badge);
+		    	$badge_text = $loaded_badge->field_badge_message['und'][0]['value'];
+		  		$reader_badge = entity_create($reader_badge_type, array('type' => 'reader_badge'));
+		  		$wrapper = entity_metadata_wrapper($reader_badge_type, $reader_badge);
+		  		$wrapper->field_readers = array($reader->id);
+		  		$wrapper->field_reader_badge = $level_badge;
+		  		$wrapper->field_badge_message = $badge_text;
+		  		$wrapper->save();
+
+		  		}
+
+		  		if(!empty($loaded_level->field_drawing_tickets)) {
+
+		    	$level_tickets=$loaded_level->field_drawing_tickets['und'][0]['value'];
+		    	}
+
+		    	else {
+		    		$level_tickets=0;
+		    	}
+
+			    	for($i=1; $i <= $level_tickets; $i++) {
+
+			    	$reader_ticket_type = 'reader_ticket';
+			  		$reader_ticket = entity_create($reader_ticket_type, array('type' => 'reader_ticket'));
+			  		$wrapper = entity_metadata_wrapper($reader_ticket_type, $reader_ticket);
+			  		$wrapper->field_readers = array($reader->id);
+			  		$wrapper->title = t('Drawing Ticket ') . $i . t(' on ') . $current_date . t(' for ') . $reader_fname . " " . $reader_lname;
+			  		$wrapper->field_readers = array($reader->id);
+			  		$wrapper->field_level = $prize_level;
+			  		$wrapper->field_ticket_status = t('Not Drawn');
+			  		$wrapper->save();
+
+		  			}
+
+
+		  			if($reader->field_current_level['und'][0]['target_id']!=$updated_level) {
+
+		  				$reader->field_current_level['und'][0]['target_id']=$updated_level;
+
+		        		entity_save('reader', $reader);
+
+		        		$level_message='';
+
+		        		if(!empty($loaded_level->field_level_message)) {
+		        			$level_message=$loaded_level->field_level_message['und'][0]['value'];
+
+		        			drupal_set_message($level_message);
+		        		}
+
+		        		
+		        	}
+		        }
+		}
+
+    		}
+
+
+}
+
+function galecia_model_entity_delete ($entity) {
+
+	if($entity->type == 'reader') {
+
+	$value=$entity->id;
+
+	$reading_log_query = new EntityFieldQuery();
+	  $reading_log_query->entityCondition('entity_type', 'reading_log')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reading_log_query = $reading_log_query->execute();
+
+	  $logs=array();
+
+	  if(!empty($reading_log_query['reading_log'])) {
+
+	  foreach($reading_log_query['reading_log'] as
+	$reading_log_key=>$reading_log_value){
+		entity_delete('reading_log', $reading_log_value->id);
+	  }
+	}
+
+	$points_query = new EntityFieldQuery();
+	  $points_query->entityCondition('entity_type', 'points')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $points_query = $points_query->execute();
+
+	  if(!empty($points_query['points'])) {
+
+	  foreach($points_query['points'] as $points_key=>$points_value){
+		entity_delete('points', $points_value->id);
+	  }
+	}
+
+	$reader_prize_query = new EntityFieldQuery();
+	  $reader_prize_query->entityCondition('entity_type', 'reader_prize')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reader_prize_query = $reader_prize_query->execute();
+
+	  if(!empty($reader_prize_query['reader_prize'])) {
+	  foreach($reader_prize_query['reader_prize'] as
+	$reader_prize_key=>$reader_prize_value){
+		entity_delete('reader_prize', $reader_prize_value->id);
+	  }
+	}
+
+	$reader_badge_query = new EntityFieldQuery();
+	  $reader_badge_query->entityCondition('entity_type', 'reader_badge')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reader_badge_query = $reader_badge_query->execute();
+
+	  if(!empty($reader_badge_query['reader_badge'])) {
+	  foreach($reader_badge_query['reader_badge'] as
+	$reader_badge_key=>$reader_badge_value){
+		entity_delete('reader_badge', $reader_badge_value->id);
+	  }
+	}
+
+	$reader_ticket_query = new EntityFieldQuery();
+	  $reader_ticket_query->entityCondition('entity_type', 'reader_ticket')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $reader_ticket_query = $reader_ticket_query->execute();
+
+	  if(!empty($reader_ticket_query['reader_ticket'])) {
+	  foreach($reader_ticket_query['reader_ticket'] as
+	$reader_ticket_key=>$reader_ticket_value){
+		entity_delete('reader_ticket', $reader_ticket_value->id);
+	  }
+	}
+
+	  $activity_log_query = new EntityFieldQuery();
+	  $activity_log_query->entityCondition('entity_type', 'activity_log')
+	  ->fieldCondition('field_readers', 'target_id', $value, '=');
+	  $activity_log_query = $activity_log_query->execute();
+
+	  if(!empty($activity_log_query['activity_log'])) {
+	  foreach($activity_log_query['activity_log'] as
+	$activity_log_key=>$activity_log_value){
+		entity_delete('activity_log', $activity_log_value->id);
+	  }
+	}
+	}
+}
 
  ?>
-
 
 
 
