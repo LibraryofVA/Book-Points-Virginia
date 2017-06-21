@@ -1336,7 +1336,7 @@ th.views-field-edit-link {
 /* Footer */
 
 #footer-wrapper > .container {
-    margin: 10px 25px;
+    margin: 10px auto;
     width: auto;
 }
 
