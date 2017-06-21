@@ -172,6 +172,7 @@ div.messages.status ul li {
 
 
 .page-node #main-content #tasks ul.primary,
+.page-reader #main-content #tasks ul.primary,
 .page-calendar #main-content #tasks ul.primary {
     border-bottom: none;
     padding-top: 15px;
@@ -179,6 +180,8 @@ div.messages.status ul li {
 
 .page-node #main-content #tasks ul.primary li a, 
 .page-node #main-content #tasks ul.primary li.active a,
+.page-reader #main-content #tasks ul.primary li a, 
+.page-reader #main-content #tasks ul.primary li.active a,
 .page-calendar #main-content #tasks ul.primary li a, 
 .page-calendar #main-content #tasks ul.primary li.active a {
     -moz-border-radius: 6px;
@@ -390,7 +393,7 @@ div.messages.status ul li {
     position: relative;
     display: block;
     float: left;
-	min-width:450px;
+	width: 92%;
 }
 
 #reader-dashboard .region-three-33-third h2 + br {
@@ -669,6 +672,7 @@ h1#page-title, .in-maintenance h1#page-title {
 
 #main-content .content-margin {
     margin: 25px 10px;
+	position: relative;
 }
 
 .rc-6 #main-content .content-style {
@@ -729,7 +733,6 @@ fieldset legend {
 
 td.views-field-edit-link a,
 td.views-field-edit-node a,
-td.views-field-id-1 a,
 .add-reader a,
 .button,
 button, 
@@ -759,6 +762,12 @@ input[type=submit],
     color: #fff;
     background-color: #337ab7;
     border-color: #2e6da4;
+}
+
+.page-library-dashboard-readers-reader-overview .reader_update_panel {
+    position: absolute;
+    top: 25px;
+    right: 35px;
 }
 
 input[value=Register] {
@@ -813,8 +822,7 @@ textarea {
 }
 
 td.views-field-edit-node a, 
-td.views-field-edit-link a,
-td.views-field-id-1 a {
+td.views-field-edit-link a {
     color: #fff;
     background-color: #0f7799;
     border-color: #adacab;
@@ -1005,12 +1013,12 @@ td.views-field-field-badge-image img {
     clear: both;
 }
 
-.entity section:before {
+.entity section::before {
     display: table;
     content: " ";
 }
 
-.entity section:after {
+.entity section::after {
     clear: both;
 }
 
@@ -1069,6 +1077,48 @@ article.user-profile section.field .field-items {
     float: left; 
 }
 
+/* Reader Overview */
+
+.page-library-dashboard-readers-reader-overview .add_activity_panel {
+    position: absolute;
+    top: 25px;
+    right:160px;
+}
+
+.page-library-dashboard-readers-reader-overview #tickets_earned_panel, 
+.page-library-dashboard-readers-reader-overview #drawing_ticket_panel {
+    padding: 30px;
+    border: none;
+    margin: 30px 0;
+    border-top: 1px solid #ccc;
+}
+
+.page-library-dashboard-readers-reader-overview h3 {
+    font-size: 1.75em;
+}
+
+.page-library-dashboard-readers-reader-overview .panel-body {
+    padding: 20px 0;
+}
+
+.page-library-dashboard-readers-reader-overview .badge-small-div {
+    float: left;
+    width: 150px;
+    text-align: center;
+    margin-left: 0;
+    margin-right: 15px;
+    height: 150px;
+}
+
+.page-library-dashboard-readers-reader-overview #tickets_earned_panel ul {
+    list-style: none;
+    margin: 0 0 30px 0;
+}
+
+.page-library-dashboard-readers-reader-overview #tickets_earned_panel li {
+    list-style: none;
+    margin: 5px 0 10px 0;
+}
 
 /* Draw a Winner */
 
@@ -1102,7 +1152,7 @@ article.user-profile section.field .field-items {
     text-transform: capitalize;
 }
 
-.views-field-field-reader-badge > div.entity-badge > h2 a:before {
+.views-field-field-reader-badge > div.entity-badge > h2 a::before {
     content: "Name: ";
 }
 
@@ -1135,14 +1185,13 @@ article.user-profile section.field .field-items {
 #edit-stars  .form-radios > input + label {
     /* only enough room for the star */
     display: inline-block;
-    overflow: hidden;
     text-indent: 9999px;
     width: 28px;
     height: 28px;
     white-space: nowrap;
     cursor: pointer;
 }
-#edit-stars .form-radios > input + label:before {
+#edit-stars .form-radios > input + label::before {
     font-family: FontAwesome;
     display: inline-block;
     text-indent: -9999px;
@@ -1150,9 +1199,9 @@ article.user-profile section.field .field-items {
     color: #888;
 }
 
-#edit-stars .form-radios > input:checked ~ label:before, 
-#edit-stars .form-radios > input + label:hover ~ label:before, 
-#edit-stars .form-radios > input + label:hover:before {
+#edit-stars .form-radios > input:checked ~ label::before, 
+#edit-stars .form-radios > input + label:hover ~ label::before, 
+#edit-stars .form-radios > input + label:hover::before {
     font-family: FontAwesome;
     content: "\f005";
     color: #e52;
@@ -1162,16 +1211,16 @@ article.user-profile section.field .field-items {
     width: .5em;
     margin-left: -.5em;
 }
-#edit-stars .star-cb-clear + label:before {
+#edit-stars .star-cb-clear + label::before {
     width: .5em;
 }
-#edit-stars .form-radios:hover > input + label:before {
+#edit-stars .form-radios:hover > input + label::before {
     font-family: FontAwesome;
     content: "\f006";
     color: #888;
 }
-#edit-stars .form-radios:hover > input + label:hover ~ label:before, 
-#edit-stars .form-radios:hover > input + label:hover:before {
+#edit-stars .form-radios:hover > input + label:hover ~ label::before, 
+#edit-stars .form-radios:hover > input + label:hover::before {
     font-family: FontAwesome;
     content: "\f005";
     color: #e52;
@@ -1282,6 +1331,13 @@ th.views-field-edit-link {
 .calendar-calendar td .inner div.calendar div, 
 .calendar-calendar td .inner div.calendar div a {
     padding: 5px 5px 0;
+}
+
+/* Footer */
+
+#footer-wrapper > .container {
+    margin: 10px 25px;
+    width: auto;
 }
 
 @media only screen and (min-width: 1500px) {
@@ -1889,7 +1945,6 @@ th.views-field-edit-link {
 
     td.views-field-edit-link a, 
     td.views-field-edit-node a,
-	td.views-field-id-1 a,
     .add-reader a, button, 
     .my-views-filter-reset, 
     input[type=submit], 

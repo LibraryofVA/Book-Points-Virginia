@@ -10,11 +10,12 @@
 
 	   	 $('#galecia-profile-builder-form').submit();
 	   		
-	   });
-
-	   $( "#view-badges-mobile" ).click(function() {
+	   }); 
+           $( "#view-badges-mobile" ).click(function() {
              $( "#badges-box" ).toggle( "fast", function() {
              });
-       });
+           });
+           $(".page-library-dashboard-readers-reader-overview .add_activity_panel input").val("Enter Reader Activity");
 	})
+        
 }(jQuery));
