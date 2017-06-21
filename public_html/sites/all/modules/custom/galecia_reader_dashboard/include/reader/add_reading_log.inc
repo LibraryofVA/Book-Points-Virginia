@@ -24,7 +24,7 @@ function reading_activity_form($form, &$form_state){
             'One'=>t('One'),
             );
 
-  		$form['book']=array(
+  	$form['book']=array(
         '#type' => 'textfield',
         '#placeholder' => t('Enter Title'),
         );
@@ -74,8 +74,8 @@ function reading_activity_form($form, &$form_state){
 
     if ($form_state['input']['unit_type'] == 'Book') {
 
-        if(empty($form_state['input']['book'])) {
-            form_set_error('book', t('You must enter a book title!'));
+        if(empty($form_state['input']['book']) && empty($form_state['input']['author'])) {
+            form_set_error('book', t('You must enter either an author or title!'));
         }
 
     }
@@ -103,6 +103,10 @@ function reading_activity_form($form, &$form_state){
         $program_id=array($results['program_id']);
 
         $profile_id=$results['profile_id'];
+
+        if (empty($results['book'])) {
+            $results['book'] = "No title entered";
+        }
 
         $entity_type='reading_log';
         $entity = entity_create($entity_type, array('type' => 'reading_log'));
