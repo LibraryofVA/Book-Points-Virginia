@@ -1988,6 +1988,11 @@ th.views-field-edit-link {
     }
 }
 
+/* added by Jim */
+
+.views-widget .form-type-select select { height: auto; }
+.views-table th a, .views-table thead a { color: #444 !important; text-decoration: underline; }
+
 /* Hiding un-used Title field from non-admins */
 body.page-admin-structure-entity-type-reader #content div.form-item-title {
 	display: none;
