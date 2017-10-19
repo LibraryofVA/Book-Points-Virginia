@@ -85,10 +85,11 @@ $code_form=drupal_get_form('code_search_form');
             }
         }
 
-
+	$activityCount = 0;
 	foreach($view2->result as $key=>$value) { 
-
-
+	  $id=$value->id;	  
+	  if (!in_array($id, $claimed_array)) {
+		$activityCount = $activityCount + 1;
 		$title=$value->eck_activity_title;
 		$description=$value->field_field_activity_description[0]['rendered']['#markup'];
 		$id=$value->id;
@@ -105,6 +106,10 @@ $code_form=drupal_get_form('code_search_form');
 		$str.= "</div><button class='activity-button' name='" . $status . " id='act_button" . $id . "' data-reader='" . $current_loaded_reader_id . "' data-activity='" . $id . "' value='" . $status . "'" . $enabled .">" .$status . "</button>";
 		$str.= "</div><br><div id='ajax-target'></div>";
 		echo $str;
+	  }
+	}
+	if ($activityCount == 0) {
+		echo "No un-claimed activities available.";
 	}
 	?>
       </div>
