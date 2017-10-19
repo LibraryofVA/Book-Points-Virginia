@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Entity Cleanup feature.
+ */
+
+include_once 'entity_cleanup.features.inc';
