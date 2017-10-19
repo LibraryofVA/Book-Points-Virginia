@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the oldpoints-killer feature.
+ */
+
+include_once 'oldpoints_killer.features.inc';
