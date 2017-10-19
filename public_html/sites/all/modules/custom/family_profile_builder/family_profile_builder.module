@@ -51,21 +51,20 @@ function family_profile_builder_form($form, &$form_state) {
 function getFamilyForm() {
 
     $form = array();
-	
 	$step1['program']=array(
         '#type' => 'radios',
         '#title' => t('Choose a Program'),
         '#options' => get_familyEnts('program'),
         '#theme' => 'program_radios_before_element',
-        );
-
-
+    );
+	$step1['text']=array(
+			'#markup'=>'<div style="clear:both;"></div>'
+	);
     $step1['submit']=array(
         '#type'=>'submit',
         '#value'=>t('Next'),
         '#attributes'=>array('class'=> array('step1'))
-      );
-
+    );
     $form[] = $step1;
 	
     $step2 = array();
