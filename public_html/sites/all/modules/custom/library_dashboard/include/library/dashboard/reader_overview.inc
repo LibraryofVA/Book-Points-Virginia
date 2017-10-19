@@ -115,7 +115,13 @@ function reader_overview (){
     $output .= "<div class=\"reader_update_panel\"><form action='/reader/reader/" . $reader_id . "/edit'>";
     $output .= "<input class='right-float' type='submit' value='Edit' />\n";
     $output .= "</form></div>";
-    $output .= "" . $program_name . " <span class='right-float'>" . $current_units . " " . $program_units . t("Read") . "</span>";
+    $output .= "" . $program_name . " <span class='right-float'>" . $current_units . " " . $program_units;
+		if ($current_units > 1) {
+			$output .= "s Read";
+		} else {
+			$output .= " Read";
+		}
+	$output .= "</span>";
     foreach ($allprizes as $key=>$value) {
 
         $title=$value[0];
@@ -125,13 +131,16 @@ function reader_overview (){
         $output .= "<div class=\"prizes_panel\"><table><tr><td class='three-col-table'>Prize: " . $title . " </td><td class='three-col-table'>" . t("Status: ") . $status . "   </td><td class='three-col-table'>" . t("Claim Link:");
 
         if ($status=='Unclaimed') { 
-
-        $output .= "<a href='/claim/" . $id ."/prize'>" . t("Claim") . "</a></td></tr></table></div>";
+        $output .= "<a href='/claim/" . $id ."/prize'>" . t(" Claim") . "</a></td></tr></table></div>";
         }
 
-        if ($status=='Claimed') { 
+        elseif ($status=='Claimed') { 
+        $output .= "<a href='/unclaim/" . $id ."/prize'>" . t(" Unclaim") . "</a></td></tr></table></div>";
+        }
 
-        $output .= "<a href='/unclaim/" . $id ."/prize'>" . t("Unclaim") . "</a></td></tr></table></div>";
+        else { 
+
+        $output .= "" . t("") . "</td></tr></table></div>";
         }
         
     }

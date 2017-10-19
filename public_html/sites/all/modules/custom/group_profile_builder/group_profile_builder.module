@@ -57,14 +57,15 @@ function getGroupForm() {
         '#title' => t('Choose a Program'),
         '#options' => get_groupEnts('program'),
         '#theme' => 'program_radios_before_element',
-        );
-
-
+    );
+	$step1['text']=array(
+			'#markup'=>'<div style="clear:both;"></div>'
+	);
     $step1['submit']=array(
         '#type'=>'submit',
         '#value'=>t('Next'),
         '#attributes'=>array('class'=> array('step1'))
-      );
+    );
 
     $form[] = $step1;
 	

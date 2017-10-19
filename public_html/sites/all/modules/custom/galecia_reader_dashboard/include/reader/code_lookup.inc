@@ -64,14 +64,15 @@ $valid=TRUE;
 
 foreach ($view->result as $key => $value) {
 
-    $codes[$value->id]=$value->field_field_activity_code[0]['raw']['value'];
+    $codes[$value->id]=strtolower($value->field_field_activity_code[0]['raw']['value']);
 
 }
 
 
     $valid_options=$codes;
 
-    $input=$form_state['input']['codes'];
+
+    $input=strtolower($form_state['input']['codes']);
 
     $checked_input='';
 
@@ -152,5 +153,9 @@ function code_search_form_submit($form, &$form_state) {
                 $readers->field_claimed_activities['und'][]['target_id']=(array)$code_id;
 
                      entity_save('reader', $readers);
+
+                       galecia_model_leveler($reader_id);
+
+                       drupal_set_message(t('You added a code!'));
 
 }
