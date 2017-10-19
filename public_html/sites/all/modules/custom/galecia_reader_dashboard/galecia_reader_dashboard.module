@@ -141,24 +141,14 @@ function galecia_reader_dashboard_form_alter(&$form, &$form_state, $form_id) {
 		$current_user=$user->uid;
 
 		if (user_has_role(4)) {
-
-		$user_details=galecia_reader_dashboard_check_registration($current_user);
-
-		foreach ($user_details as $key => $value) {
- 
-    	$current_reader=$user_details[$key];
-		}
-
-		$form['profile_id']['#value'] = $current_reader;
-
-		}
-
-		else {
-
-		$current_reader = arg(5);
-
-		$form['profile_id']['#value'] = $current_reader;
-
+			$user_details=galecia_reader_dashboard_check_registration($current_user);
+			foreach ($user_details as $key => $value) {
+ 				$current_reader=$user_details[$key];
+			}
+			$form['profile_id']['#value'] = $current_reader;
+		} else {
+			$current_reader = arg(5);
+			$form['profile_id']['#value'] = $current_reader;
 		}
 
 
