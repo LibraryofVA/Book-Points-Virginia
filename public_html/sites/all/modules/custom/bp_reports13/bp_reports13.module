@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the bp-reports13 feature.
+ */
+
+include_once 'bp_reports13.features.inc';
