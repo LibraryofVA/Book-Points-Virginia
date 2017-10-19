@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Quiz Rewards Bundle feature.
+ */
+
+include_once 'quiz_rewards_bundle.features.inc';
