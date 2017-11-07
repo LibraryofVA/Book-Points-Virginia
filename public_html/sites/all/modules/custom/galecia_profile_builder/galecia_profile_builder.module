@@ -26,7 +26,7 @@ function galecia_profile_builder_theme($existing, $type, $theme, $path) {
 function galecia_profile_builder_menu() {
   $items['galecia_profile_builder/wizard_form'] = array(
     'type' => MENU_CALLBACK,
-    'title' => t('Add Reader'),
+    'title' => t('Add Readers'),
     'page callback' => 'drupal_get_form',
     'access arguments' => array('access content'),
      'page arguments'=>array('galecia_profile_builder_form'));
@@ -72,21 +72,13 @@ function getForm($programSelected) {
  	);
 	$form[] = $step1;
 	
-	$loadedProgram = entity_load_single('program', $programSelected);
-	if(isset($loadedProgram)) {
-		if($loadedProgram != '0') {
-			$altReg = $loadedProgram->field_allow_alt_registration['und'][0]['value'];
-		}
-	}
 	$step2 = array();
-	if(isset($altReg)){
-		if($altReg == 1) {
-			$step2['text']=array(
-			'#markup'=>'<div id="altreg">If you would like to register multiple readers under one account do not fill out the form but instead use our <a href="/family_profile_builder/wizard_form">Family Registration</a> process. If you are the organizer of a reading group please use our <a href="/group_profile_builder/wizard_form">Group Registration</a> process instead of completing the form above.</div>'
-	  		);
-		}
-	}
-    $step2['age']=array(
+    $step2['first_name']=array(
+        '#type'=>'textfield',
+        '#title'=>t('First Name'),
+        '#description'=>t("Enter your Reader's first name.")
+ 	);
+	$step2['age']=array(
         '#type'=>'textfield',
         '#title'=>t('Age'),
         '#description'=>t("Enter your reader's age.")
@@ -127,6 +119,18 @@ function getForm($programSelected) {
         '#value'=>t('Next')
 	);
     $form[] = $step2;
+	
+	$step3['new_reader']=array(
+        '#type'=>'radios',
+        '#title'=>t('Do you want to add another Reader?'),
+        '#options'=>array('Yes','No')
+    );
+
+    $step3['submit']=array(
+        '#type'=>'submit',
+        '#value'=>t('Next')
+    );
+    $form[] = $step3;
 
     return $form;
 }
@@ -180,8 +184,8 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
         $entity = entity_create($entity_type, array('type' => 'reader'));
         $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
-        $wrapper->field_first_name = $current_user->name;
-        $wrapper->title = $current_user->name;
+        $wrapper->field_first_name = $finalformvalues['first_name'];
+ 		$wrapper->title = $finalformvalues['first_name'];
         $wrapper->field_last_name = $current_user->field_last_name['und'][0]['value'];
         $wrapper->field_age = $finalformvalues['age'];
         $wrapper->field_grade = $finalformvalues['grade'];
@@ -303,7 +307,10 @@ function galecia_profile_builder_form_submit($form, &$form_state) {
 
     }
 
-    if ($form_state['step'] + 1 == getNumberOfSteps()) {
+    if (!empty($finalformvalues)) {
+		$continue=$finalformvalues['new_reader'];
+    }
+    if ($continue == 1) {
         drupal_goto('reader-dashboard');
     }
 

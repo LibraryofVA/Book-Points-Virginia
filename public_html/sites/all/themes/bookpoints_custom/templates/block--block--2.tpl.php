@@ -59,5 +59,8 @@ echo drupal_render($form);
              echo "<li class='color-". $i ." reader-element " . $selected . "' data-reader-id=" . $value .">" . $entity->field_first_name['und'][0]['value']. "</li>";
           } ?>
       </ul>
+      <div class='add-reader'>
+      	<a href='/reader/dashboard/profile/add'>Add Reader</a>
+      </div>
    </div>
 </div>
